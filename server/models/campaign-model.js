@@ -3,35 +3,35 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var Campaign = new Schema({
-    name          : String,
-    description   : String,
+    name          : {type: String, required: true},
+    description   : {type: String, required: true},
 
-    initialProvisions : Number,
-    initialGold       : Number,
-    initialItems      : [String],
+    initialProvisions : {type: Number, default: 0},
+    initialGold       : {type: Number, default: 0},
+    initialItems      : {type: [String], default: []},
 
-    hasEnded    : Boolean,
-    private     : Boolean,
-    password    : String,
-    battleMode  : Boolean,
+    hasEnded    : {type: Boolean, default: false},
+    private     : {type: Boolean, default: false},
+    password    : {type: String}, //hashed and salted
+    battleMode  : {type: Boolean, default: false},
 
-    creationTime  : Date,
-    lastPlayBy    : String, // "player" | "gm"
-    lastPlayTime  : Date,
+    creationTime  : {type: Date, default: Date.now, required: true},
+    lastPlayBy    : {type: String, enum: ['gm', 'player'], required: true},
+    lastPlayTime  : {type: Date, default: Date.now, required: true},
 
     character   : {type: Schema.Types.ObjectId, ref: 'Character'},
-    monsters    : [{type: Schema.Types.ObjectId, ref: 'Monster'}],
+    monsters    : {type: [{type: Schema.Types.ObjectId, ref: 'Monster'}]},
 
-    inCharacterLog: [{
-          posted: Date,
-          senderName: String,
-          message: String
-        }],
-    outOfCharacterLog: [{
-          posted: Date,
-          senderName: String,
-          message: String
-        }]
+    inCharacterLog: {type: [{
+          posted:     {type: Date, required: true},
+          senderName: {type: String, required: true},
+          message:    {type: String, required: true}
+    }], default: []},
+    outOfCharacterLog: {type: [{
+          posted:     {type: Date, required: true},
+          senderName: {type: String, required: true},
+          message:    {type: String, required: true}
+    }], default: []}
 });
 
 module.exports = mongoose.model('Campaign', Campaign );

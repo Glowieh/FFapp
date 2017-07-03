@@ -8,7 +8,7 @@ router.get('/', function(req, res, next) {
   res.send('API root');
 });
 
-router.get('/campaign', campaignController.getAll);
+router.get('/campaign', campaignController.getAllBasic);
 router.get('/campaign/:id', campaignController.getById);
 
 router.get('/character/:id', characterController.getById);
