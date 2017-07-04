@@ -12,9 +12,6 @@ mongoose.connect(mongoDB);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, '../client/dist')));
@@ -22,26 +19,17 @@ app.use(express.static(path.join(__dirname, '../client/dist')));
 app.use('/api', api);
 
 //Angular app
-app.get('/', (req, res) => {
+app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname, '../client/dist/index.html'));
 });
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
-
-// error handler
+// error handler for the API
 app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+  // only provide error in dev mode
+  let msg = req.app.get('env') === 'development' ? err : err.message;
 
-  // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  res.send(JSON.stringify({error: msg}));
 });
 
 module.exports = app;
