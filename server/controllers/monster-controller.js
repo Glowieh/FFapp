@@ -20,7 +20,7 @@ exports.create = function(req, res, next) {
 
   newMonster.save(function (err) {
     if (err) { return next(err); }
-    res.sendStatus(200)
+    res.sendStatus(200);
   });
 };
 
@@ -28,18 +28,21 @@ exports.update = function(req, res, next) {
   Monster.findById(req.params.id, function(err, result) {
     if(err) { return next(err); }
 
-    result.stamina = req.body.stamina || result.stamina;
+    if(result) {
+      result.stamina = req.body.stamina || result.stamina;
 
-    result.save(function (err) {
-      if (err) { return next(err); }
-      res.sendStatus(200)
-    });
+      result.save(function (err) {
+        if (err) { return next(err); }
+        res.sendStatus(200);
+      });
+    }
+    else { res.sendStatus(404); }
   });
 };
 
 exports.delete = function(req, res, next) {
-  Monster.remove({_id: req.params.id}, function(err, result) {
+  Monster.findOneAndRemove({_id: req.params.id}, function(err) {
     if (err) { return next(err); }
-    res.sendStatus(200)
+    res.sendStatus(200);
   });
 }

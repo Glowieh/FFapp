@@ -1,5 +1,9 @@
 var mongoose = require('mongoose');
 var sanitizerPlugin = require('mongoose-sanitizer');
+var debug = require('debug')('ffapp:campaign-model');
+
+var Monster = require('../models/monster-model');
+var Character = require('../models/character-model');
 
 var Schema = mongoose.Schema;
 
@@ -31,8 +35,15 @@ var Campaign = new Schema({
 });
 
 Campaign.pre('remove', function(next) {
-  Monster.remove({campaign_id: this._id}).exec();
-  Character.remove({campaign_id: this._id}).exec();
+  Monster.remove({campaign_id: this._id}, function(err) {
+    if(err) { debug(err); }
+    else { debug("Removed monsters of a deleted campaign"); }
+  });
+
+  Character.remove({campaign_id: this._id}, function(err) {
+    if(err) { debug(err); }
+    else { debug("Removed the character of a deleted campaign"); }
+  });
   next();
 });
 

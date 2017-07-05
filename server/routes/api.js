@@ -17,7 +17,7 @@ router.delete('/campaign/:id', campaignController.delete);
 
 router.post('/character/', characterController.create);
 router.get('/character/campaign/:id', characterController.getByCampaignId);
-router.put('/character/:id', characterController.update);
+router.put('/character/campaign/:id', characterController.updateByCampaignId);
 
 router.post('/monster/', monsterController.create);
 router.get('/monster/campaign/:id', monsterController.getByCampaignId);
