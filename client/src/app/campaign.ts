@@ -21,7 +21,7 @@ export class Campaign {
   lastPlayTime  : Date;
 
   character   : Character;
-  monsters    : Monster;
+  monsters    : Monster[];
 
   inCharacterLog    : LogMessage[];
   outOfCharacterLog : LogMessage[];
