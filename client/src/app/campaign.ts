@@ -17,7 +17,7 @@ export class Campaign {
   battleMode  : boolean;
 
   creationTime  : Date;
-  lastPlayBy    : string;
+  lastPlayBy    : string; //"GM" | "Player"
   lastPlayTime  : Date;
 
   character   : Character;

@@ -3,7 +3,7 @@ var debug = require('debug')('ffapp:campaign-controller');
 var Campaign = require('../models/campaign-model');
 
 exports.getAllBasic = function(req, res, next) {
-  Campaign.find({}, 'name description ended private lastPlayBy lastPlayTime creationTime', function(err, result) {
+  Campaign.find({}, 'name description hasEnded private lastPlayBy lastPlayTime creationTime', function(err, result) {
     if(err) { return next(err); }
 
     res.send(JSON.stringify(result));

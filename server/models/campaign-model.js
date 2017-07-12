@@ -27,7 +27,7 @@ var Campaign = new Schema({
   battleMode  : {type: Boolean, default: false},
 
   creationTime  : {type: Date, default: Date.now, required: true},
-  lastPlayBy    : {type: String, enum: ['gm', 'player'], required: true},
+  lastPlayBy    : {type: String, enum: ['GM', 'Player'], required: true},
   lastPlayTime  : {type: Date, default: Date.now, required: true},
 
   inCharacterLog: {type: [ChatMessage], default: []},

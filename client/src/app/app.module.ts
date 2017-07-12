@@ -4,6 +4,7 @@ import { HttpModule } from '@angular/http';
 
 import { AppComponent } from './app.component';
 import { CampaignListComponent } from './campaign-list.component';
+import { CampaignCreationComponent } from './campaign-creation.component';
 import { CharacterCreationComponent } from './character-creation.component';
 import { GameComponent } from './game.component';
 
@@ -15,6 +16,7 @@ import { AppRoutingModule } from './app-routing.module';
   declarations: [
     AppComponent,
     CampaignListComponent,
+    CampaignCreationComponent,
     CharacterCreationComponent,
     GameComponent
   ],
