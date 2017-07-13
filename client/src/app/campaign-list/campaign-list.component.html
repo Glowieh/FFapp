@@ -1,0 +1,28 @@
+<header>
+  <button type="button" class="create-campaign btn btn-md btn-primary">Start a new campaign</button>
+  <button type="button" class="about btn btn-md btn-info">About</button>
+</header>
+
+<section>
+  <div class="campaign-list">
+    <campaign-subset
+      [campaigns]="campaigns"
+      [type]="'Public'"
+      [privateState]="false"
+      [endState]="false">
+    </campaign-subset>
+
+    <campaign-subset
+      [campaigns]="campaigns"
+      [type]="'Private'"
+      [privateState]="true"
+      [endState]="false">
+    </campaign-subset>
+
+    <campaign-subset
+      [campaigns]="campaigns"
+      [type]="'Finished'"
+      [endState]="true">
+    </campaign-subset>
+  </div>
+</section>

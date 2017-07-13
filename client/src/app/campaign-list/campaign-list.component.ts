@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { BackendService } from './backend.service';
-import { Campaign } from './campaign';
+import { BackendService } from '../backend.service';
+import { Campaign } from '../campaign';
 
 @Component({
   selector: 'campaign-list',
@@ -18,7 +18,10 @@ export class CampaignListComponent {
 
   ngOnInit(): void {
     this.backendService.getCampaignsBasic()
-      .then(result => {this.campaigns = result;})
+      .then(result => {
+        this.campaigns = result;
+        this.campaigns.sort((a, b) => a.lastPlayTime < b.lastPlayTime ? 1 : -1)
+      })
       .catch(error => this.error = error);
   }
 }
