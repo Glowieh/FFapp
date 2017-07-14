@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 
 import { BackendService } from '../backend.service';
 import { Campaign } from '../campaign';
@@ -13,7 +14,8 @@ export class CampaignListComponent {
   error: any;
 
   constructor(
-    private backendService: BackendService
+    private backendService: BackendService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -23,5 +25,9 @@ export class CampaignListComponent {
         this.campaigns.sort((a, b) => a.lastPlayTime < b.lastPlayTime ? 1 : -1)
       })
       .catch(error => this.error = error);
+  }
+
+  gotoCreateCampaign(): void {
+    this.router.navigate(['/campaign-creation']);
   }
 }

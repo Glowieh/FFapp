@@ -1,0 +1,54 @@
+<h2>Campaign Creation</h2>
+<form (ngSubmit)="onCreate()" #campaignForm="ngForm">
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" class="form-control" id="name"
+    required minlength="3" maxlength="32"
+    [(ngModel)]="campaign.name" name="name" #name="ngModel">
+  </div>
+  <campaign-creation-errors
+    [control]="name"
+    [name]="'Name'"
+    [minlength]="3"
+    [maxlength]="32">
+  </campaign-creation-errors>
+
+  <div class="form-group">
+    <label for="description">Description</label>
+    <textarea class="form-control" rows="4" id="description"
+    required minlength="1" maxlength="512"
+    [(ngModel)]="campaign.description" name="description" #description="ngModel"></textarea>
+  </div>
+  <campaign-creation-errors
+    [control]="description"
+    [name]="'Description'"
+    [minlength]="1"
+    [maxlength]="512">
+  </campaign-creation-errors>
+
+  <div class="form-group">
+    <label for="provisions">Initial Provisions</label>
+    <input type="number" class="form-control" id="provisions"
+    required [min]="0"
+    [(ngModel)]="campaign.initialProvisions" name="provisions" #provisions="ngModel">
+  </div>
+  <campaign-creation-errors
+    [control]="provisions"
+    [name]="'Initial provisions'"
+    [min]="0">
+  </campaign-creation-errors>
+
+  <div class="form-group">
+    <label for="gold">Initial Gold</label>
+    <input type="number" class="form-control" id="gold"
+    required [min]="0"
+    [(ngModel)]="campaign.initialGold" name="gold" #gold="ngModel">
+  </div>
+  <campaign-creation-errors
+    [control]="gold"
+    [name]="'Initial gold'"
+    [min]="0">
+  </campaign-creation-errors>
+
+  <button type="submit" class="btn btn-success" [disabled]="!campaignForm.form.valid">Create</button>
+</form>

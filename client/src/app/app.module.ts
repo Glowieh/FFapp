@@ -1,11 +1,14 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
+import { FormsModule } from '@angular/forms';
+import { CustomFormsModule } from 'ng2-validation'
 
 import { AppComponent } from './app.component';
 import { CampaignListComponent } from './campaign-list/campaign-list.component';
 import { CampaignSubsetComponent } from './campaign-list/campaign-subset.component';
-import { CampaignCreationComponent } from './campaign-creation.component';
+import { CampaignCreationComponent } from './campaign-creation/campaign-creation.component';
+import { CampaignCreationErrorsComponent } from './campaign-creation/campaign-creation-errors.component';
 import { CharacterCreationComponent } from './character-creation.component';
 import { GameComponent } from './game.component';
 
@@ -19,12 +22,15 @@ import { AppRoutingModule } from './app-routing.module';
     CampaignListComponent,
     CampaignSubsetComponent,
     CampaignCreationComponent,
+    CampaignCreationErrorsComponent,
     CharacterCreationComponent,
     GameComponent
   ],
   imports: [
     BrowserModule,
     HttpModule,
+    FormsModule,
+    CustomFormsModule,
     AppRoutingModule
   ],
   providers: [BackendService],

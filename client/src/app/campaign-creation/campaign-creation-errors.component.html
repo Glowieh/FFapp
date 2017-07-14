@@ -1,0 +1,15 @@
+<div *ngIf="control.errors && (control.dirty || control.touched)"
+     class="alert alert-danger">
+    <div [hidden]="!control.errors.required">
+      {{name}} is required.
+    </div>
+    <div [hidden]="!control.errors.minlength">
+      {{name}} must be at least {{minlength}} characters long.
+    </div>
+    <div [hidden]="!control.errors.maxlength">
+      {{name}} cannot be more than {{maxlength}} characters long.
+    </div>
+    <div [hidden]="!control.errors.min">
+      {{name}} must be at least {{min}}.
+    </div>
+</div>
