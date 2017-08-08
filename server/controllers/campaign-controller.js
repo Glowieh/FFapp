@@ -1,4 +1,5 @@
 var debug = require('debug')('ffapp:campaign-controller');
+var passwordHash = require('password-hash');
 
 var Campaign = require('../models/campaign-model');
 
@@ -19,6 +20,12 @@ exports.getById = function(req, res, next) {
 };
 
 exports.create = function(req, res, next) {
+  let hashedPassword = null;
+
+  if(req.body.password) {
+    hashedPassword = passwordHash.generate(req.body.password);
+  }
+
   let newCampaign = new Campaign({
     name          : req.body.name,
     description   : req.body.description,
@@ -26,8 +33,8 @@ exports.create = function(req, res, next) {
     initialGold       : req.body.initialGold,
     initialItems      : req.body.initialItems,
     private     : req.body.private,
-    password    : req.body.password,
-    lastPlayBy  : 'gm'
+    password    : hashedPassword,
+    lastPlayBy  : 'GM'
   });
 
   newCampaign.save(function (err) {

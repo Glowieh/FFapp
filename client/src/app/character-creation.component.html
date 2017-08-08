@@ -1,1 +1,51 @@
-<h1>Character creation component!</h1>
+<h2>Character Creation</h2>
+
+<div class="alert alert-danger" *ngIf="errorMsg">
+  {{errorMsg}}
+</div>
+
+<form (ngSubmit)="onSubmit()" #characterForm="ngForm">
+  <div class="form-group">
+    <label for="name">Name</label>
+    <input type="text" class="form-control" id="name"
+    required minlength="3" maxlength="16"
+    [(ngModel)]="character.name" name="name" #name="ngModel">
+  </div>
+  <campaign-creation-errors
+    [control]="name"
+    [name]="'Name'"
+    [minlength]="3"
+    [maxlength]="16">
+  </campaign-creation-errors>
+
+  <label>Attributes</label>
+  <ul class="list-group">
+    <li class="list-group-item">
+      Swordsmanship: {{character.swordsmanship}}
+      <span [hidden]="character.swordsmanship"><button type="button" class="btn btn-info" (click)="rollSwordsmanship()">Roll 2d6+6</button></span>
+    </li>
+    <li class="list-group-item">
+      Skill: {{character.skill}}
+      <span [hidden]="character.skill"><button type="button" class="btn btn-info" (click)="rollSkill()">Roll 2d6+6</button></span>
+    </li>
+    <li class="list-group-item">
+      Luck: {{character.luck}}
+      <span [hidden]="character.luck"><button type="button" class="btn btn-info" (click)="rollLuck()">Roll 2d6+6</button></span>
+    </li>
+    <li class="list-group-item">
+      Stamina: {{character.stamina}}
+      <span [hidden]="character.stamina"><button type="button" class="btn btn-info" (click)="rollStamina()">Roll 2d6+12</button></span>
+    </li>
+  </ul>
+
+  <label>Starting Items</label>
+  <ul class="list-group">
+    <li class="list-group-item" *ngFor="let listItem of campaign.initialItems">
+      {{listItem}}
+    </li>
+    <li class="list-group-item">Gold: {{campaign.initialGold}}</li>
+    <li class="list-group-item">Provisions: {{campaign.initialProvisions}}</li>
+  </ul>
+
+  <button type="submit" class="btn btn-success" [disabled]="!characterForm.form.valid || !character.skill || !character.swordsmanship || !character.luck || !character.stamina">Create</button>
+</form>

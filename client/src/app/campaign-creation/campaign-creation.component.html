@@ -1,5 +1,10 @@
 <h2>Campaign Creation</h2>
-<form (ngSubmit)="onCreate()" #campaignForm="ngForm">
+
+<div class="alert alert-danger" *ngIf="submitError">
+  Campaign creation failed!
+</div>
+
+<form (ngSubmit)="onSubmit()" #campaignForm="ngForm">
   <div class="form-group">
     <label for="name">Name</label>
     <input type="text" class="form-control" id="name"
