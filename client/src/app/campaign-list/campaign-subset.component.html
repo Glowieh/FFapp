@@ -3,11 +3,11 @@
     <h2>{{type}} Campaigns</h2>
     <ng-container *ngFor="let campaign of campaigns">
       <div class="campaign" *ngIf="(campaign.hasEnded == endState && endState == true) || (campaign.private == privateState && campaign.hasEnded == endState)">
-        <h3 *ngIf="campaign.character"><a [routerLink]="['/game', campaign._id]">{{campaign.name}}</a></h3>
-        <h3 *ngIf="!campaign.character"><a [routerLink]="['/character-creation', campaign._id]">{{campaign.name}}</a></h3>
+        <h3 *ngIf="campaign.lastPlayBy != 'None'"><a [routerLink]="['/game', campaign._id]">{{campaign.name}}</a></h3>
+        <h3 *ngIf="campaign.lastPlayBy == 'None'"><a [routerLink]="['/character-creation', campaign._id]">{{campaign.name}}</a></h3>
         <span>Started: {{campaign.creationTime | date}}</span>
-        <span *ngIf="campaign.character">Last play by: {{campaign.lastPlayBy}} on {{campaign.lastPlayTime | date}}</span>
-        <span *ngIf="!campaign.character">Waiting for character</span>
+        <span *ngIf="campaign.lastPlayBy != 'None'">Last play by: {{campaign.lastPlayBy}} on {{campaign.lastPlayTime | date}}</span>
+        <span *ngIf="campaign.lastPlayBy == 'None'">Waiting for character</span>
         <span>{{campaign.description}}</span>
       </div>
     </ng-container>

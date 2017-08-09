@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { BackendService } from '../backend.service';
-import { Campaign } from '../campaign';
+import { Campaign } from '../misc/campaign';
 
 @Component({
   selector: 'campaign-list',

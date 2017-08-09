@@ -27,7 +27,7 @@ var Campaign = new Schema({
   battleMode  : {type: Boolean, default: false},
 
   creationTime  : {type: Date, default: Date.now, required: true},
-  lastPlayBy    : {type: String, enum: ['GM', 'Player'], required: true},
+  lastPlayBy    : {type: String, enum: ['GM', 'Player', 'None'], required: true},
   lastPlayTime  : {type: Date, default: Date.now, required: true},
 
   inCharacterLog: {type: [ChatMessage], default: []},
@@ -35,12 +35,12 @@ var Campaign = new Schema({
 });
 
 Campaign.pre('remove', function(next) {
-  Monster.remove({campaign_id: this._id}, function(err) {
+  Monster.remove({campaignId: this._id}, function(err) {
     if(err) { debug(err); }
     else { debug("Removed monsters of a deleted campaign"); }
   });
 
-  Character.remove({campaign_id: this._id}, function(err) {
+  Character.remove({campaignId: this._id}, function(err) {
     if(err) { debug(err); }
     else { debug("Removed the character of a deleted campaign"); }
   });

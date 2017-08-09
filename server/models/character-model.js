@@ -8,7 +8,7 @@ var Character = new Schema({
     provisions      : {type: Number, required: true, min: [0, 'Provisions too low']},
     gold            : {type: Number, required: true, min: [0, 'Gold too low']},
     items           : {type: [String]},
-    campaign_id     : {type: Schema.Types.ObjectId, ref: 'Campaign'},
+    campaignId      : {type: Schema.Types.ObjectId, ref: 'Campaign'},
 
     skill           : {type: Number, required: true, min: [1, 'Skill too low']},
     maxSkill        : {type: Number, required: true, min: [1, 'Max skill too low']},

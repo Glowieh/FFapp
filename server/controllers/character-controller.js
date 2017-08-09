@@ -1,7 +1,8 @@
 var Character = require('../models/character-model');
+var debug = require('debug')('ffapp:character-controller');
 
 exports.getByCampaignId = function(req, res, next) {
-  Character.findOne({campaign_id: req.params.id}, function(err, result) {
+  Character.findOne({campaignId: req.params.id}, function(err, result) {
     if(err) { return next(err); }
 
     res.send(JSON.stringify(result));
@@ -14,7 +15,7 @@ exports.create = function(req, res, next) {
     provisions      : req.body.provisions,
     gold            : req.body.gold,
     items           : req.body.items,
-    campaign_id     : req.body.campaign_id,
+    campaignId      : req.body.campaignId,
     skill           : req.body.skill,
     maxSkill        : req.body.maxSkill,
     swordsmanship   : req.body.swordsmanship,
@@ -32,7 +33,7 @@ exports.create = function(req, res, next) {
 };
 
 exports.updateByCampaignId = function(req, res, next) {
-  Character.findOne({campaign_id: req.params.id}, function(err, result) {
+  Character.findOne({campaignId: req.params.id}, function(err, result) {
     if(err) { return next(err); }
 
     if(result) {

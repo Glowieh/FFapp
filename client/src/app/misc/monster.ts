@@ -1,6 +1,6 @@
 export class Monster {
   name        : string;
-  campaign_id : string;
+  campaignId  : string;
   combatSkill : number;
   stamina     : number;
   maxStamina  : number;

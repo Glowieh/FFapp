@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { BackendService } from '../backend.service';
-import { Campaign } from '../campaign';
+import { Campaign } from '../misc/campaign';
 
 @Component({
   selector: 'campaign-creation',
@@ -40,7 +40,7 @@ export class CampaignCreationComponent {
   onSubmit(): void {
     this.submitError = false;
     this.backendService.addCampaign(this.campaign)
-      .then(() => this.router.navigateByUrl('/'),
+      .then(() => this.router.navigate(['/']),
             () => this.submitError = true);
   }
 }

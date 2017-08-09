@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 
-import { BackendService } from './backend.service';
-import { Campaign } from './campaign';
+import { BackendService } from '../backend.service';
+import { Campaign } from '../misc/campaign';
 
 @Component({
   selector: 'game',

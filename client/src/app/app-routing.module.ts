@@ -3,8 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 
 import { CampaignListComponent } from './campaign-list/campaign-list.component';
 import { CampaignCreationComponent } from './campaign-creation/campaign-creation.component';
-import { CharacterCreationComponent } from './character-creation.component';
-import { GameComponent } from './game.component';
+import { CharacterCreationComponent } from './character-creation/character-creation.component';
+import { GameComponent } from './game/game.component';
 
 const routes: Routes = [
   { path: '', component: CampaignListComponent },

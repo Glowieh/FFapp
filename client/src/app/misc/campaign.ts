@@ -17,11 +17,8 @@ export class Campaign {
   battleMode  : boolean;
 
   creationTime  : Date;
-  lastPlayBy    : string; //"GM" | "Player"
+  lastPlayBy    : string; //"GM" | "Player" | "None"
   lastPlayTime  : Date;
-
-  character   : Character;
-  monsters    : Monster[];
 
   inCharacterLog    : LogMessage[];
   outOfCharacterLog : LogMessage[];

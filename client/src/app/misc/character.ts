@@ -3,7 +3,7 @@ export class Character {
   provisions      : number;
   gold            : number;
   items           : string[];
-  campaign_id     : string;
+  campaignId      : string;
 
   skill           : number;
   maxSkill        : number;

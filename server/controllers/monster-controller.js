@@ -2,7 +2,7 @@ var sanitizerPlugin = require('mongoose-sanitizer');
 var Monster = require('../models/monster-model');
 
 exports.getByCampaignId = function(req, res, next) {
-  Monster.find({campaign_id: req.params.id}, function(err, result) {
+  Monster.find({campaignId: req.params.id}, function(err, result) {
     if(err) { return next(err); }
 
     res.send(JSON.stringify(result));
@@ -12,7 +12,7 @@ exports.getByCampaignId = function(req, res, next) {
 exports.create = function(req, res, next) {
   let newMonster = new Monster({
     name            : req.body.name,
-    campaign_id     : req.body.campaign_id,
+    campaignId     : req.body.campaignId,
     combatSkill     : req.body.combatSkill,
     stamina         : req.body.stamina,
     maxStamina      : req.body.maxStamina
