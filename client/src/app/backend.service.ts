@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { Headers, Http, Response } from '@angular/http';
 
-import { Campaign } from './campaign';
-import { Character } from './character';
-import { Monster } from './monster';
+import { Campaign } from './misc/campaign';
+import { Character } from './misc/character';
+import { Monster } from './misc/monster';
 
 import 'rxjs/add/operator/toPromise';
 
@@ -11,9 +11,29 @@ import 'rxjs/add/operator/toPromise';
 export class BackendService {
   private apiUrl = 'api/';
 
-  constructor(private http: Http) { }
+  campaignPasswords: string[] = [];
+
+  constructor(private http: Http) {}
 
 //campaigns
+  authenticateCampaign(id: string, password: string): Promise<Boolean> {
+    const headers = new Headers({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http
+      .post(this.apiUrl + 'campaign/' + id + '/auth', JSON.stringify(password), { headers: headers })
+      .toPromise()
+      .then(response => {
+        let result: boolean = response.json() as boolean;
+        if(result) {
+          this.campaignPasswords[id] = password;
+        }
+        return result;
+      })
+      .catch(this.handleError);
+  }
+
   getCampaignsBasic(): Promise<Array<Campaign>> {
     return this.http
       .get(this.apiUrl + 'campaign')

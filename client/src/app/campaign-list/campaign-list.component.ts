@@ -22,7 +22,7 @@ export class CampaignListComponent {
     this.backendService.getCampaignsBasic()
       .then(result => {
         this.campaigns = result;
-        this.campaigns.sort((a, b) => a.lastPlayTime < b.lastPlayTime ? 1 : -1)
+        this.campaigns.sort((a, b) => a.lastPlayTime < b.lastPlayTime ? 1 : -1);
       })
       .catch(error => this.error = error);
   }

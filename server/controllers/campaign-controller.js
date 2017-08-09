@@ -3,6 +3,19 @@ var passwordHash = require('password-hash');
 
 var Campaign = require('../models/campaign-model');
 
+exports.authenticateCampaign = function(req, res, next) {
+  Campaign.findById(req.params.id, function(err, result) {
+    if(err) { return next(err); }
+
+    if(passwordHash.verify(req.body.password, result.password)) {
+      res.send(JSON.stringify(true));
+    }
+    else {
+      res.send(JSON.stringify(false));
+    }
+  });
+};
+
 exports.getAllBasic = function(req, res, next) {
   Campaign.find({}, 'name description hasEnded private lastPlayBy lastPlayTime creationTime', function(err, result) {
     if(err) { return next(err); }

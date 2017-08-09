@@ -9,6 +9,7 @@ router.get('/', function(req, res, next) {
   res.send('API root');
 });
 
+router.post('/campaign/:id/auth', campaignController.authenticateCampaign);
 router.post('/campaign/', campaignController.create);
 router.get('/campaign', campaignController.getAllBasic);
 router.get('/campaign/:id', campaignController.getById);

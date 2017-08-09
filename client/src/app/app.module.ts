@@ -13,6 +13,7 @@ import { CharacterCreationComponent } from './character-creation/character-creat
 import { GameComponent } from './game/game.component';
 
 import { BackendService } from './backend.service';
+import { AuthGuard } from './auth-guard.service';
 
 import { AppRoutingModule } from './app-routing.module';
 
@@ -33,7 +34,7 @@ import { AppRoutingModule } from './app-routing.module';
     CustomFormsModule,
     AppRoutingModule
   ],
-  providers: [BackendService],
+  providers: [BackendService, AuthGuard],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
