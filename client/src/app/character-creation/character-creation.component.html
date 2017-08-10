@@ -41,11 +41,11 @@
 
     <label>Starting Items</label>
     <ul class="list-group">
+      <li class="list-group-item">Gold: {{campaign.initialGold}}</li>
+      <li class="list-group-item">Provisions: {{campaign.initialProvisions}}</li>
       <li class="list-group-item" *ngFor="let listItem of campaign.initialItems">
         {{listItem}}
       </li>
-      <li class="list-group-item">Gold: {{campaign.initialGold}}</li>
-      <li class="list-group-item">Provisions: {{campaign.initialProvisions}}</li>
     </ul>
 
     <button type="submit" class="btn btn-success" [disabled]="!characterForm.form.valid || !character.skill || !character.swordsmanship || !character.luck || !character.stamina">Create</button>

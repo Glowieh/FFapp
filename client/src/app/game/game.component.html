@@ -1,27 +1,49 @@
-<div class="col-md-4">
-  <h3>Out of character chat</h3>
-  <div class="well well-sm">
-    <div *ngFor="let message of messages">
-      {{message.text}}
+<div *ngIf="!connected">
+  Connecting...
+</div>
+<div *ngIf="connected">
+  <div class="col-md-4">
+    <h3>Out of character chat</h3>
+    <div class="well well-sm">
+      <div *ngFor="let msg of campaign.outOfCharacterLog">
+        {{msg.posted | date}} <{{msg.senderName}}> {{msg.message}}
+      </div>
     </div>
+    <form class="form-inline">
+      <input type="text" name="ooc-log" value="" class="form-control" [(ngModel)]="messageOOC">
+      <button type="button" class="btn btn-default" (click)="sendOOCMessage()">Send</button>
+    </form>
   </div>
-  <form class="form-inline">
-    <input type="text" name="ooc-log" value="" class="form-control" [(ngModel)]="message">
-    <button type="button" class="btn btn-default" (click)="sendOOCMessage()">Send</button>
-  </form>
-</div>
 
-<div class="col-md-4">
-  <h3>In character chat</h3>
-  <div class="well well-sm">
-    IC log
+  <div class="col-md-4">
+    <h3>In character chat</h3>
+    <div class="well well-sm">
+      <div *ngFor="let msg of campaign.inCharacterLog">
+        {{msg.posted | date}} <{{msg.senderName}}> {{msg.message}}
+      </div>
+    </div>
+    <form class="form-inline">
+      <input type="text" name="ic-log" value="" class="form-control" [(ngModel)]="messageIC">
+      <button type="button" class="btn btn-default" (click)="sendICMessage()">Send</button>
+    </form>
   </div>
-  <form class="form-inline">
-    <input type="text" name="ic-log" value="" class="form-control">
-    <button type="button" class="btn btn-default">Send</button>
-  </form>
-</div>
 
-<div class="col-md-4">
-  Character
+  <div class="col-md-4">
+    <h3>{{character.name}}</h3>
+    <label>Attributes</label>
+    <ul class="list-group">
+      <li class="list-group-item">Swordsmanship: {{character.swordsmanship}} / {{character.maxSwordsmanship}}</li>
+      <li class="list-group-item">Skill: {{character.skill}} / {{character.maxSkill}}</li>
+      <li class="list-group-item">Luck: {{character.luck}} / {{character.maxLuck}}</li>
+      <li class="list-group-item">Stamina: {{character.stamina}} / {{character.maxStamina}}</li>
+    </ul>
+    <label>Inventory</label>
+    <ul class="list-group">
+      <li class="list-group-item">Gold: {{character.gold}}</li>
+      <li class="list-group-item">Provisions: {{character.provisions}}</li>
+      <li class="list-group-item" *ngFor="let listItem of character.items">
+        {{listItem}}
+      </li>
+    </ul>
+  </div>
 </div>

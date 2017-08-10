@@ -1,8 +1,10 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 
-import { BackendService } from '../backend.service';
 import { SocketService } from '../socket.service';
 import { Campaign } from '../misc/campaign';
+import { Character } from '../misc/character';
+import { Monster } from '../misc/monster';
+import { LogMessage } from '../misc/log-message';
 
 @Component({
   selector: 'game',
@@ -10,19 +12,24 @@ import { Campaign } from '../misc/campaign';
   styleUrls: ['./game.component.css']
 })
 export class GameComponent {
-  messages: string[] = [];
+  character: Character;
+  campaign: Campaign;
+  monsters: Monster[];
+
+  connected: boolean = false;
   connection;
-  message: string;
+  messageOOC: string;
+  messageIC: string;
 
   constructor(
-    private backendService: BackendService,
     private socketService: SocketService
   ) {}
-
+///////////////////////MITEN INITIN YHTEYDESSÄ DATAN ALUSTUS, MITEN ERI TYYPPISTEN VIESTIN VASTAANOTTO OBSERVABLEILLA, YMS SOCKETSERVICEN KEHITYS
   ngOnInit(): void {
     this.connection = this.socketService.getMessages()
-    .subscribe((message: string) => {
-       this.messages.push(message);
+    .subscribe((message: LogMessage) => {
+       this.campaign.inCharacterLog.push(message);
+       this.campaign.outOfCharacterLog.push(message);
      });
   }
 
@@ -31,7 +38,12 @@ export class GameComponent {
   }
 
   sendOOCMessage() {
-    this.socketService.sendMessage(this.message);
-    this.message = '';
+    this.socketService.sendMessage(this.messageOOC);
+    this.messageOOC = '';
+  }
+
+  sendICMessage() {
+    this.socketService.sendMessage(this.messageIC);
+    this.messageIC = '';
   }
 }
