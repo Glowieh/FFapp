@@ -68,7 +68,7 @@ export class CharacterCreationComponent {
     this.backendService.addCharacter(this.character)
     .then(() => this.backendService.updateCampaign(this.campaignId, this.campaign),
           () => this.errorMsg += "Character creation failed! ")
-    .then(() => this.router.navigate(['/game/', this.campaignId]),
+    .then(() => this.router.navigate(['/game/', this.campaignId, 'Player']),
           () => this.errorMsg += "Campaign update failed!");
   }
 }

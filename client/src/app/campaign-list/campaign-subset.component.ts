@@ -24,7 +24,20 @@ export class CampaignSubsetComponent {
     private router: Router
   ) {}
 
-  enter(campaign: Campaign): void {
+  enter(campaign: Campaign, role: string): void {
+    let url: string;
+
+    if(campaign.lastPlayBy == "None") {
+      url = '/character-creation/';
+    }
+    else {
+      url = '/game/';
+    }
+
+    this.router.navigate([url, campaign._id, role]);
+  }
+
+  enterPassword(campaign: Campaign, role: string): void {
     this.errorMsg = null;
     let url: string;
 
@@ -36,7 +49,7 @@ export class CampaignSubsetComponent {
       url = '/game/';
     }
 
-    this.router.navigate([url, campaign._id])
+    this.router.navigate([url, campaign._id, role])
     .then((result) => {
       if(!result) {
         this.errorMsg = "Wrong password!";

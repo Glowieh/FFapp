@@ -12,7 +12,7 @@ const routes: Routes = [
   { path: '', component: CampaignListComponent },
   { path: 'campaign-creation',  component: CampaignCreationComponent },
   { path: 'character-creation/:id',  component: CharacterCreationComponent, canActivate: [AuthGuard] },
-  { path: 'game/:id', component: GameComponent, canActivate: [AuthGuard] }
+  { path: 'game/:id/:role', component: GameComponent, canActivate: [AuthGuard] }
 ];
 
 @NgModule({

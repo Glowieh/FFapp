@@ -10,15 +10,19 @@
               <div class="form-group">
                 <label for="password">Password:</label>
                 <input type="password" name="password" class="form-control" [(ngModel)]="password">
-                <button type="button" class="btn btn-success" (click)="enter(campaign)">Enter</button>
+                <button type="button" class="btn btn-success" (click)="enterPassword(campaign, 'GM')">Enter as GM</button>
+                <button type="button" class="btn btn-success" (click)="enterPassword(campaign, 'Player')">Enter as Player</button>
               </div>
             </form>
             <div *ngIf="errorMsg" class="alert alert-danger">{{errorMsg}}</div>
           </div>
         </div>
         <div *ngIf="!privateState">
-          <h3 *ngIf="campaign.lastPlayBy != 'None'"><a [routerLink]="['/game', campaign._id]">{{campaign.name}}</a></h3>
-          <h3 *ngIf="campaign.lastPlayBy == 'None'"><a [routerLink]="['/character-creation', campaign._id]">{{campaign.name}}</a></h3>
+          <h3><a href="#" data-toggle="collapse" data-target="#enter-buttons">{{campaign.name}}</a></h3>
+          <div class="collapse" id="enter-buttons">
+            <button type="button" class="btn btn-success" (click)="enter(campaign, 'GM')">Enter as GM</button>
+            <button type="button" class="btn btn-success" (click)="enter(campaign, 'Player')">Enter as Player</button>
+          </div>
         </div>
         <span>Started: {{campaign.creationTime | date}}</span>
         <span *ngIf="campaign.lastPlayBy != 'None'">Last play by: {{campaign.lastPlayBy}} on {{campaign.lastPlayTime | date}}</span>
