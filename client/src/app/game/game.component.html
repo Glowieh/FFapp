@@ -1,1 +1,27 @@
-<h1>Game component!</h1>
+<div class="col-md-4">
+  <h3>Out of character chat</h3>
+  <div class="well well-sm">
+    <div *ngFor="let message of messages">
+      {{message.text}}
+    </div>
+  </div>
+  <form class="form-inline">
+    <input type="text" name="ooc-log" value="" class="form-control" [(ngModel)]="message">
+    <button type="button" class="btn btn-default" (click)="sendOOCMessage()">Send</button>
+  </form>
+</div>
+
+<div class="col-md-4">
+  <h3>In character chat</h3>
+  <div class="well well-sm">
+    IC log
+  </div>
+  <form class="form-inline">
+    <input type="text" name="ic-log" value="" class="form-control">
+    <button type="button" class="btn btn-default">Send</button>
+  </form>
+</div>
+
+<div class="col-md-4">
+  Character
+</div>

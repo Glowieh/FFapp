@@ -8,6 +8,8 @@ var app = require('../app');
 var debug = require('debug')('ffapp:server');
 var http = require('http');
 
+var socketController = require('../controllers/socket-controller');
+
 /**
  * Get port from environment and store in Express.
  */
@@ -16,10 +18,12 @@ var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 
 /**
- * Create HTTP server.
+ * Create HTTP server and initialize sockets
  */
 
 var server = http.createServer(app);
+var io = require('socket.io')(server);
+socketController.init(io);
 
 /**
  * Listen on provided port, on all network interfaces.

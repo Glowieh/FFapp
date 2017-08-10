@@ -6,12 +6,14 @@ var api = require('./routes/api');
 
 var app = express();
 
+//database
 var mongoose = require('mongoose');
 var mongoDB = '127.0.0.1:27017';
 mongoose.connect(mongoDB);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 
+//middleware
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, '../client/dist')));
