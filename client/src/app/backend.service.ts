@@ -10,7 +10,6 @@ import 'rxjs/add/operator/toPromise';
 @Injectable()
 export class BackendService {
   private apiUrl = 'api/';
-
   campaignPasswords: string[] = [];
 
   constructor(private http: Http) {}
@@ -22,10 +21,11 @@ export class BackendService {
     });
 
     return this.http
-      .post(this.apiUrl + 'campaign/' + id + '/auth', JSON.stringify(password), { headers: headers })
+      .post(this.apiUrl + 'campaign/' + id + '/auth', JSON.stringify({password: password}), { headers: headers })
       .toPromise()
       .then(response => {
         let result: boolean = response.json() as boolean;
+
         if(result) {
           this.campaignPasswords[id] = password;
         }

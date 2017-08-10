@@ -7,10 +7,12 @@ exports.authenticateCampaign = function(req, res, next) {
   Campaign.findById(req.params.id, function(err, result) {
     if(err) { return next(err); }
 
-    if(passwordHash.verify(req.body.password, result.password)) {
+    if(!result.private || passwordHash.verify(req.body.password, result.password)) {
+      debug("Correct password");
       res.send(JSON.stringify(true));
     }
     else {
+      debug("Wrong password");
       res.send(JSON.stringify(false));
     }
   });
