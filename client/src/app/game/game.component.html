@@ -6,11 +6,11 @@
     <h3>Out of character chat</h3>
     <div class="well well-sm">
       <div *ngFor="let msg of campaign.outOfCharacterLog">
-        {{msg.posted | date}} <{{msg.senderName}}> {{msg.message}}
+        {{msg.posted | date:'HH:mm'}} <{{msg.senderName}}> {{msg.message}}
       </div>
     </div>
     <form class="form-inline">
-      <input type="text" name="ooc-log" value="" class="form-control" [(ngModel)]="messageOOC">
+      <input type="text" name="ooc-log" value="" class="form-control" [(ngModel)]="oocMessage">
       <button type="button" class="btn btn-default" (click)="sendOOCMessage()">Send</button>
     </form>
   </div>
@@ -19,11 +19,11 @@
     <h3>In character chat</h3>
     <div class="well well-sm">
       <div *ngFor="let msg of campaign.inCharacterLog">
-        {{msg.posted | date}} <{{msg.senderName}}> {{msg.message}}
+        {{msg.posted | date:'HH:mm'}} <{{msg.senderName}}> {{msg.message}}
       </div>
     </div>
     <form class="form-inline">
-      <input type="text" name="ic-log" value="" class="form-control" [(ngModel)]="messageIC">
+      <input type="text" name="ic-log" value="" class="form-control" [(ngModel)]="icMessage">
       <button type="button" class="btn btn-default" (click)="sendICMessage()">Send</button>
     </form>
   </div>

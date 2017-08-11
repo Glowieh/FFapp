@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 
 import { SocketService } from '../socket.service';
 import { Campaign } from '../misc/campaign';
@@ -18,18 +19,36 @@ export class GameComponent {
 
   connected: boolean = false;
   connection;
-  messageOOC: string;
-  messageIC: string;
+  role: string;
+  icMessage: string = "";
+  oocMessage: string = "";
 
   constructor(
-    private socketService: SocketService
+    private socketService: SocketService,
+    private route: ActivatedRoute
   ) {}
-///////////////////////MITEN INITIN YHTEYDESSÄ DATAN ALUSTUS, MITEN ERI TYYPPISTEN VIESTIN VASTAANOTTO OBSERVABLEILLA, YMS SOCKETSERVICEN KEHITYS
+
   ngOnInit(): void {
-    this.connection = this.socketService.getMessages()
-    .subscribe((message: LogMessage) => {
-       this.campaign.inCharacterLog.push(message);
-       this.campaign.outOfCharacterLog.push(message);
+    this.role = this.route.snapshot.paramMap.get('role');
+
+    this.connection = this.socketService.connect(this.route.snapshot.paramMap.get('id'))
+    .subscribe((packet: any) => {
+      console.log("Got a packet: ", packet);
+
+      if(packet.type == "init") {
+        this.character = packet.character;
+        this.campaign = packet.campaign;
+        this.monsters = packet.monsters;
+        this.connected = true;
+      }
+
+      if(packet.type == "ic-message") {
+        this.campaign.inCharacterLog.push(packet.message);
+      }
+
+      if(packet.type == "ooc-message") {
+        this.campaign.outOfCharacterLog.push(packet.message);
+      }
      });
   }
 
@@ -37,13 +56,19 @@ export class GameComponent {
     this.connection.unsubscribe();
   }
 
-  sendOOCMessage() {
-    this.socketService.sendMessage(this.messageOOC);
-    this.messageOOC = '';
+  sendICMessage() {
+    if(this.icMessage != "") {
+      let msg: LogMessage = {senderName: this.role, message: this.icMessage, posted: null}
+      this.socketService.icMessage(msg);
+      this.icMessage = '';
+    }
   }
 
-  sendICMessage() {
-    this.socketService.sendMessage(this.messageIC);
-    this.messageIC = '';
+  sendOOCMessage() {
+    if(this.oocMessage != "") {
+      let msg: LogMessage = {senderName: this.role, message: this.oocMessage, posted: null}
+      this.socketService.oocMessage(msg);
+      this.oocMessage = '';
+    }
   }
 }
