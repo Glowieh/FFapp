@@ -1,6 +1,9 @@
 var sanitizerPlugin = require('mongoose-sanitizer');
 var Monster = require('../models/monster-model');
 
+///////Socket functions
+
+/* api->socket
 exports.getByCampaignId = function(req, res, next) {
   Monster.find({campaignId: req.params.id}, function(err, result) {
     if(err) { return next(err); }
@@ -45,4 +48,4 @@ exports.delete = function(req, res, next) {
     if (err) { return next(err); }
     res.sendStatus(200);
   });
-}
+}*/

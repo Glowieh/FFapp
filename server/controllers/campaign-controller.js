@@ -3,6 +3,8 @@ var passwordHash = require('password-hash');
 
 var Campaign = require('../models/campaign-model');
 
+///////API functions
+
 exports.authenticateCampaign = function(req, res, next) {
   Campaign.findById(req.params.id, function(err, result) {
     if(err) { return next(err); }
@@ -85,6 +87,35 @@ exports.update = function(req, res, next) {
   });
 };
 
+///////Socket functions
+
+exports.saveLogMessage = function(io, id, message, type) {
+  var promise = Campaign.findById(id).exec();
+
+  promise.then(result => {
+    if(result) {
+      if(type == 'ic') {
+        result.inCharacterLog.push(message);
+      }
+      else {
+        result.outOfCharacterLog.push(message);
+      }
+
+      return result.save();
+    }
+  })
+  .then(() => {
+    if(type == 'ic') {
+      io.in(id).emit('packet', {type: 'ic-message', message: message})
+    }
+    else {
+      io.in(id).emit('packet', {type: 'ooc-message', message: message})
+    }
+  })
+  .catch(err => debug('saveLogMessage error: ', err));
+}
+
+/* api->socket
 exports.delete = function(req, res, next) {
   Campaign.findOne({_id: req.params.id}, function(err, result) {
     if (err) { return next(err); }
@@ -98,4 +129,4 @@ exports.delete = function(req, res, next) {
     }
     else { res.sendStatus(404); }
   });
-}
+}*/

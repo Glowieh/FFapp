@@ -54,13 +54,6 @@ export class BackendService {
       .catch(this.handleError);
   }
 
-  deleteCampaign(id: string): Promise<Response> {
-    return this.http
-      .delete(this.apiUrl + 'campaign/' + id)
-      .toPromise()
-      .catch(this.handleError);
-  }
-
   addCampaign(campaign: Campaign): Promise<Response> {
     const headers = new Headers({
       'Content-Type': 'application/json'
@@ -83,16 +76,6 @@ export class BackendService {
   }
 
 //characters
-  getCharacterByCampaignId(id: string): Promise<Character> {
-    return this.http
-      .get(this.apiUrl + 'character/campaign/' + id)
-      .toPromise()
-      .then((response) => {
-        return response.json() as Character;
-      })
-      .catch(this.handleError);
-  }
-
   addCharacter(character: Character): Promise<Response> {
     const headers = new Headers({
       'Content-Type': 'application/json'
@@ -100,55 +83,6 @@ export class BackendService {
 
     return this.http
       .post(this.apiUrl + 'character', JSON.stringify(character), { headers: headers })
-      .toPromise()
-      .catch(this.handleError);
-  }
-
-  updateCharacter(id: string, character: Character): Promise<Response> {
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-
-    return this.http
-      .put(this.apiUrl + 'character/' + id, JSON.stringify(character), { headers: headers })
-      .toPromise()
-      .catch(this.handleError);
-  }
-
-//monsters
-  getMonstersByCampaignId(id: string): Promise<Array<Monster>> {
-    return this.http
-      .get(this.apiUrl + 'monster/campaign/' + id)
-      .toPromise()
-      .then((response) => {
-        return response.json() as Monster[];
-      })
-      .catch(this.handleError);
-  }
-
-  deleteMonster(id: string): Promise<Response> {
-    return this.http
-      .delete(this.apiUrl + 'monster/' + id)
-      .toPromise()
-      .catch(this.handleError);
-  }
-
-  addMonster(monster: Monster): Promise<Response> {
-    const headers = new Headers({
-      'Content-Type': 'application/json'
-    });
-
-    return this.http
-      .post(this.apiUrl + 'monster', JSON.stringify(monster), { headers: headers })
-      .toPromise()
-      .catch(this.handleError);
-  }
-
-  updateMonster(id: string, monster: Monster): Promise<Response> {
-    const headers = new Headers();
-    headers.append('Content-Type', 'application/json');
-
-    return this.http
-      .put(this.apiUrl + 'monster/' + id, JSON.stringify(monster), { headers: headers })
       .toPromise()
       .catch(this.handleError);
   }

@@ -8,6 +8,7 @@ var app = express();
 
 //database
 var mongoose = require('mongoose');
+mongoose.Promise = global.Promise;
 var mongoDB = '127.0.0.1:27017';
 mongoose.connect(mongoDB);
 var db = mongoose.connection;

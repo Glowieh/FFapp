@@ -36,4 +36,8 @@ export class SocketService {
   oocMessage(message: LogMessage): void {
     this.socket.emit('ooc-message', message);
   }
+
+  updateCharacter(character: Character): void {
+    this.socket.emit('update-character', character);
+  }
 }

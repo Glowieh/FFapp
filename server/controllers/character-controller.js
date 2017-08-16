@@ -1,13 +1,7 @@
 var Character = require('../models/character-model');
 var debug = require('debug')('ffapp:character-controller');
 
-exports.getByCampaignId = function(req, res, next) {
-  Character.findOne({campaignId: req.params.id}, function(err, result) {
-    if(err) { return next(err); }
-
-    res.send(JSON.stringify(result));
-  });
-};
+///////API functions
 
 exports.create = function(req, res, next) {
   let newCharacter = new Character({
@@ -32,28 +26,23 @@ exports.create = function(req, res, next) {
   });
 };
 
-exports.updateByCampaignId = function(req, res, next) {
-  Character.findOne({campaignId: req.params.id}, function(err, result) {
-    if(err) { return next(err); }
+///////Socket functions
 
+exports.updateByCampaignId = function(io, id, character) {
+  var promise = Character.findOne({campaignId: id}).exec();
+
+  promise.then(result => {
     if(result) {
-      result.provisions = req.body.provisons || result.provisions;
-      result.gold = req.body.gold || result.gold;
-      result.items = req.body.items || result.items;
-      result.skill = req.body.skill || result.skill;
-      result.maxSkill = req.body.maxSkill || result.maxSkill;
-      result.swordsmanship = req.body.swordsmanship || result.swordsmanship;
-      result.maxSwordsmanship = req.body.maxSwordsmanship || result.maxSwordsmanship;
-      result.luck = req.body.luck || result.luck;
-      result.maxLuck = req.body.maxLuck || result.maxLuck;
-      result.stamina = req.body.stamina || result.stamina;
-      result.maxStamina = req.body.maxStamina || result.maxStamina;
+      result.swordsmanship = character.swordsmanship;
+      result.skill = character.skill;
+      result.luck = character.luck;
+      result.stamina = character.stamina;
+      result.gold = character.gold;
+      result.provisions = character.provisions;
 
-      result.save(function (err) {
-        if (err) { return next(err); }
-        res.sendStatus(200);
-      });
+      return result.save();
     }
-    else { res.sendStatus(404); }
-  });
+  })
+  .then(() => io.in(id).emit('packet', {type: 'update-character', character: character}))
+  .catch(err => debug('updateByCampaignId error: ', err));
 };

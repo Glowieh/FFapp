@@ -5,6 +5,11 @@ var Campaign = require('../models/campaign-model');
 var Monster = require('../models/monster-model');
 var Character = require('../models/character-model');
 
+var campaignController = require('../controllers/campaign-controller');
+var monsterController = require('../controllers/monster-controller');
+var characterController = require('../controllers/character-controller');
+
+
 exports.init = function(io) {
   io.on('connection', (socket) => {
     var id = socket.handshake.query.id;
@@ -14,7 +19,7 @@ exports.init = function(io) {
       debug('A user disconnected from id: ' + id);
     });
 
-      //laita ryhmään
+    socket.join(id);
 
     async.parallel({
       character: (cb) => {
@@ -39,30 +44,18 @@ exports.init = function(io) {
 
       socket.on('ic-message', (message) => {
         message.posted = new Date();
-
-        //EI JÄRKEVÄÄ, TEE ERI TIEDOSTOON TIETOKANNAN KÄPISTELY
-        Campaign.findById(id, function(err, result) {
-          if(err) { debug("ic-message campaign find error"); }
-          else {
-            if(result) {
-              result.inCharacterLog.push(message);
-              result.save(function (err) {
-                if (err) { debug("ic-message campaign save error"); }
-                else {
-                  socket.emit('packet', {type: 'ic-message', message: message});
-                }
-              });
-            }
-          }
-        });
+        campaignController.saveLogMessage(io, id, message, 'ic');
       });
 
       socket.on('ooc-message', (message) => {
         message.posted = new Date();
-        socket.emit('packet', {type: 'ooc-message', message: message});
+        campaignController.saveLogMessage(io, id, message, 'ooc');
       });
 
-      //end of async.parallel
-    });
-  });
+      socket.on('update-character', (character) => {
+        characterController.updateByCampaignId(io, id, character);
+      });
+
+    }); //end of async.parallel
+  }); //end of io.on('connection' ...)
 }

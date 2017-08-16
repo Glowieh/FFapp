@@ -1,0 +1,29 @@
+.delete-item-span {
+  float: right;
+  font-weight: bold;
+}
+
+.stretch-height {
+  height: calc(100% - 130px);
+}
+
+.stretch-width {
+  width: calc(100% - 64px);
+}
+
+.row {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display:         flex;
+  flex-wrap: wrap;
+}
+
+.row > [class*='col-'] {
+  display: flex;
+  flex-direction: column;
+}
+
+input[type='number'] {
+  width: 65px;
+}
