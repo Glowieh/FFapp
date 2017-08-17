@@ -1,34 +1,32 @@
 <div class="row">
-  <section>
-    <h2>{{type}} Campaigns</h2>
-    <ng-container *ngFor="let campaign of campaigns">
-      <div class="campaign" *ngIf="(campaign.hasEnded == endState && endState == true) || (campaign.private == privateState && campaign.hasEnded == endState)">
-        <div *ngIf="privateState">
-          <h3><a href="#" data-toggle="collapse" data-target="#password-form">{{campaign.name}}</a></h3>
-          <div class="collapse" id="password-form">
-            <form class="form-inline">
-              <div class="form-group">
-                <label for="password">Password:</label>
-                <input type="password" name="password" class="form-control" [(ngModel)]="password">
-                <button type="button" class="btn btn-success" (click)="enterPassword(campaign, 'GM')">Enter as GM</button>
-                <button type="button" class="btn btn-success" (click)="enterPassword(campaign, 'Player')">Enter as Player</button>
-              </div>
-            </form>
-            <div *ngIf="errorMsg" class="alert alert-danger">{{errorMsg}}</div>
-          </div>
+  <h2>{{type}} Campaigns</h2>
+  <ng-container *ngFor="let campaign of campaigns">
+    <div class="campaign" *ngIf="(campaign.hasEnded == endState && endState == true) || (campaign.private == privateState && campaign.hasEnded == endState)">
+      <div *ngIf="privateState">
+        <h3><a data-toggle="collapse" href="#password-form-{{campaign._id}}">{{campaign.name}}</a></h3>
+        <div class="collapse" id="password-form-{{campaign._id}}">
+          <form class="form-inline">
+            <div class="form-group">
+              <label for="password">Password:</label>
+              <input type="password" name="password" class="form-control" [(ngModel)]="password">
+              <button type="button" class="btn btn-success" (click)="enterPassword(campaign, 'GM')">Enter as GM</button>
+              <button type="button" class="btn btn-success" (click)="enterPassword(campaign, 'Player')">Enter as Player</button>
+            </div>
+          </form>
+          <div *ngIf="errorMsg" class="alert alert-danger">{{errorMsg}}</div>
         </div>
-        <div *ngIf="!privateState">
-          <h3><a href="#" data-toggle="collapse" data-target="#enter-buttons">{{campaign.name}}</a></h3>
-          <div class="collapse" id="enter-buttons">
-            <button type="button" class="btn btn-success" (click)="enter(campaign, 'GM')">Enter as GM</button>
-            <button type="button" class="btn btn-success" (click)="enter(campaign, 'Player')">Enter as Player</button>
-          </div>
-        </div>
-        <span>Started: {{campaign.creationTime | date}}</span>
-        <span *ngIf="campaign.lastPlayBy != 'None'">Last play by: {{campaign.lastPlayBy}} on {{campaign.lastPlayTime | date}}</span>
-        <span *ngIf="campaign.lastPlayBy == 'None'">Waiting for character</span>
-        <span>{{campaign.description}}</span>
       </div>
-    </ng-container>
-  </section>
+      <div *ngIf="!privateState">
+        <h3><a data-toggle="collapse" href="#enter-buttons-{{campaign._id}}">{{campaign.name}}</a></h3>
+        <div class="collapse" id="enter-buttons-{{campaign._id}}">
+          <button type="button" class="btn btn-success" (click)="enter(campaign, 'GM')">Enter as GM</button>
+          <button type="button" class="btn btn-success" (click)="enter(campaign, 'Player')">Enter as Player</button>
+        </div>
+      </div>
+      <span>Started: {{campaign.creationTime | date}}</span>
+      <span *ngIf="campaign.lastPlayBy != 'None'">Last play by: {{campaign.lastPlayBy}} on {{campaign.lastPlayTime | date}}</span>
+      <span *ngIf="campaign.lastPlayBy == 'None'">Waiting for character</span>
+      <span>{{campaign.description}}</span>
+    </div>
+  </ng-container>
 </div>

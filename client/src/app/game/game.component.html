@@ -5,160 +5,42 @@
   <div *ngIf="connected">
     <div class="row">
       <div class="col-md-4">
-          <h3>Out of character chat</h3>
-          <div class="well well-sm stretch-height">
-            <div *ngFor="let msg of campaign.outOfCharacterLog">
-              {{msg.posted | date:'HH:mm'}} <{{msg.senderName}}> {{msg.message}}
-            </div>
-          </div>
-          <form class="form-inline">
-            <input type="text" name="ooc-log" value="" class="form-control stretch-width" [(ngModel)]="oocMessage">
-            <button type="button" class="btn btn-default" (click)="sendOOCMessage()">Send</button>
-          </form>
+        <chat class="chat"
+          [title]="'Out of character chat'"
+          [type]="'ooc'"
+          [log]="campaign.outOfCharacterLog"
+          [role]="role">
+        </chat>
       </div>
-
       <div class="col-md-4">
-        <h3>In character chat</h3>
-        <div class="well well-sm stretch-height">
-          <div *ngFor="let msg of campaign.inCharacterLog">
-            {{msg.posted | date:'HH:mm'}} <{{msg.senderName}}> {{msg.message}}
-          </div>
-        </div>
-        <form class="form-inline">
-          <input type="text" name="ic-log" value="" class="form-control stretch-width" [(ngModel)]="icMessage">
-          <button type="button" class="btn btn-default" (click)="sendICMessage()">Send</button>
-        </form>
+        <chat class="chat"
+          [title]="'In character chat'"
+          [type]="'ic'"
+          [log]="campaign.inCharacterLog"
+          [role]="role">
+        </chat>
       </div>
-
       <div class="col-md-4">
-        <h3>{{character.name}}</h3>
-        <label>Attributes</label>
-        <ul class="list-group">
-          <li class="list-group-item">
-            Swordsmanship: {{character.swordsmanship}} / {{character.maxSwordsmanship}}
-            <div *ngIf="role=='GM'">
-              <form class="form-inline">
-                <div class="form-group">
-                  <input type="number" class="form-control" name="swordsmanship" [(ngModel)]="swordsmanship">
-                  <button type="button" class="btn btn-sm btn-default" *ngIf="role == 'GM'" (click)="set('swordsmanship')">Set</button>
-                </div>
-              </form>
-            </div>
-          </li>
-          <li class="list-group-item">
-            Skill: {{character.skill}} / {{character.maxSkill}}
-            <div *ngIf="role=='GM'">
-              <form class="form-inline">
-                <div class="form-group">
-                  <input type="number" class="form-control" name="skill" [(ngModel)]="skill">
-                  <button type="button" class="btn btn-sm btn-default" *ngIf="role == 'GM'" (click)="set('skill')">Set</button>
-                </div>
-              </form>
-            </div>
-            <div *ngIf="role=='Player'">
-              Test your skill:
-              <div class="btn-group">
-                <button type="button" class="btn btn-sm btn-default" (click)="testSkill('easy')">Easy</button>
-                <button type="button" class="btn btn-sm btn-default" (click)="testSkill('normal')">Normal</button>
-                <button type="button" class="btn btn-sm btn-default" (click)="testSkill('hard')">Hard</button>
-                <button type="button" class="btn btn-sm btn-default" (click)="testSkill('extreme')">Extreme</button>
-              </div>
-            </div>
-          </li>
-          <li class="list-group-item">
-            Luck: {{character.luck}} / {{character.maxLuck}}
-            <div *ngIf="role=='GM'">
-              <form class="form-inline">
-                <div class="form-group">
-                  <input type="number" class="form-control" name="luck" [(ngModel)]="luck">
-                  <button type="button" class="btn btn-sm btn-default" *ngIf="role == 'GM'" (click)="set('luck')">Set</button>
-                </div>
-              </form>
-            </div>
-            <button type="button" class="btn btn-sm btn-default"  *ngIf="role=='Player'" (click)="testLuck()">Test your luck</button>
-          </li>
-          <li class="list-group-item">
-            Stamina: {{character.stamina}} / {{character.maxStamina}}
-            <div *ngIf="role=='GM'">
-              <form class="form-inline">
-                <div class="form-group">
-                  <input type="number" class="form-control" name="stamina" [(ngModel)]="stamina">
-                  <button type="button" class="btn btn-sm btn-default" *ngIf="role == 'GM'" (click)="set('stamina')">Set</button>
-                </div>
-              </form>
-            </div>
-          </li>
-        </ul>
-
-        <label>Inventory</label>
-        <ul class="list-group">
-          <li class="list-group-item">
-            Provisions: {{character.provisions}}
-            <div *ngIf="role=='GM'">
-              <form class="form-inline">
-                <div class="form-group">
-                  <input type="number" class="form-control" name="provisions" [(ngModel)]="provisions">
-                  <button type="button" class="btn btn-sm btn-default" *ngIf="role == 'GM'" (click)="set('provisions')">Set</button>
-                </div>
-              </form>
-            </div>
-            <button type="button" class="btn btn-sm btn-default"  *ngIf="role=='Player'" (click)="eatProvision()" [disabled]="campaign.battleMode || character.provisions < 1">Eat a provision</button>
-          </li>
-          <li class="list-group-item">
-            Gold: {{character.gold}}
-            <div *ngIf="role=='GM'">
-              <form class="form-inline">
-                <div class="form-group">
-                  <input type="number" class="form-control" name="gold" [(ngModel)]="gold">
-                  <button type="button" class="btn btn-sm btn-default" *ngIf="role == 'GM'" (click)="set('gold')">Set</button>
-                </div>
-              </form>
-            </div>
-          </li>
-          <li class="list-group-item" *ngFor="let listItem of character.items">
-            {{listItem}}
-            <span class="delete-item-span" *ngIf="role=='GM'"><button type="button" class="btn btn-danger btn-xs" (click)="deleteItem(listItem);">&times;</button></span>
-          </li>
-          <li class="list-group-item" *ngIf="role=='GM'">
-            <form class="form-inline">
-              <div class="form-group">
-                <input type="text" name="item" class="form-control" id="item" [(ngModel)]="item">
-                <button type="button" class="btn btn-sm btn-success" (click)="addItem();">Add</button>
-              </div>
-            </form>
-          </li>
-        </ul>
+        <character-info
+          [character]="character"
+          [role]="role"
+          [battleMode]="campaign.battleMode">
+        </character-info>
       </div>
     </div>
 
     <div *ngIf="role == 'GM'">
       <div class="row">
-        <div *ngIf="!campaign.battleMode">
-          <h3>Battle Mode preparations</h3>
-          <form class="form-inline">
-            <label for="monsterName">Name: </label>
-            <input type="text" name="monsterName" value="" class="form-control" [(ngModel)]="monsterName">
-            <label for="monsterCombatSkill">Combat Skill: </label>
-            <input type="number" name="monsterCombatSkill" value="" class="form-control" [(ngModel)]="monsterCombatSkill">
-            <label for="monsterStamina">Stamina: </label>
-            <input type="number" name="monsterStamina" value="" class="form-control" [(ngModel)]="monsterStamina">
-            <button type="button" class="btn btn-default" (click)="addMonster()">Add Monster</button>
-          </form>
-          <ul class="list-group">
-            <li class="list-group-item" *ngFor="let monster of addedMonsters">
-              {{monster.name}} (Combat skill: {{monster.combatSkill}} / Stamina: {{monster.stamina}})
-              <span class="delete-item-span"><button type="button" class="btn btn-danger btn-xs" (click)="deleteAddedMonster(monster);">&times;</button></span>
-            </li>
-          </ul>
-          <button type="button" class="btn btn-default" (click)="toggleBattleMode()">Enter Battle Mode with these monsters</button>
+        <div class="col-md-8">
+          <battle
+            [battleMode]="campaign.battleMode"
+            [id]="id">
+          </battle>
         </div>
-        <div *ngIf="campaign.battleMode">
-          <button type="button" class="btn btn-default" (click)="toggleBattleMode()">Exit Battle Mode</button>
+        <div class="col-md-4">
+          <button type="button" class="btn btn-danger" *ngIf="!campaign.hasEnded" (click)="toggleEnded()">End Campaign</button>
+          <button type="button" class="btn btn-danger" *ngIf="campaign.hasEnded" (click)="toggleEnded()">Resume Campaign</button>
         </div>
-      </div>
-      <div class="row">
-        <button type="button" class="btn btn-default" *ngIf="!campaign.hasEnded" (click)="toggleEnded()">End Campaign</button>
-        <button type="button" class="btn btn-default" *ngIf="campaign.hasEnded" (click)="toggleEnded()">Resume Campaign</button>
       </div>
     </div>
   </div>

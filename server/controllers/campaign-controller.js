@@ -115,6 +115,20 @@ exports.saveLogMessage = function(io, id, message, type) {
   .catch(err => debug('saveLogMessage error: ', err));
 }
 
+exports.setLastPlayed = function(io, id, playedBy) {
+  var promise = Campaign.findById(id).exec();
+
+  promise.then(result => {
+    if(result) {
+      result.lastPlayBy = playedBy;
+      result.lastPlayTime = new Date();
+
+      return result.save();
+    }
+  })
+  .catch(err => debug('saveLogMessage error: ', err));
+}
+
 /* api->socket
 exports.delete = function(req, res, next) {
   Campaign.findOne({_id: req.params.id}, function(err, result) {

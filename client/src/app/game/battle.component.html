@@ -1,0 +1,23 @@
+<div *ngIf="!battleMode">
+  <h3>Battle preparations</h3>
+  <form class="form-inline">
+    <label for="monsterName">Name: </label>
+    <input type="text" name="monsterName" value="" class="form-control" [(ngModel)]="monsterName">
+    <label for="monsterCombatSkill">Combat Skill: </label>
+    <input type="number" name="monsterCombatSkill" value="" class="form-control" [(ngModel)]="monsterCombatSkill">
+    <label for="monsterStamina">Stamina: </label>
+    <input type="number" name="monsterStamina" value="" class="form-control" [(ngModel)]="monsterStamina">
+    <button type="button" class="btn btn-default" (click)="addMonster()">Add Monster</button>
+  </form>
+  <br/>
+  <ul class="list-group">
+    <li class="list-group-item" *ngFor="let monster of addedMonsters">
+      {{monster.name}} (Combat skill: {{monster.combatSkill}} / Stamina: {{monster.stamina}})
+      <span class="delete-item-span"><button type="button" class="btn btn-danger btn-xs" (click)="deleteAddedMonster(monster);">&times;</button></span>
+    </li>
+  </ul>
+  <button type="button" class="btn btn-default" (click)="toggleBattleMode()">Enter Battle Mode with these monsters</button>
+</div>
+<div *ngIf="battleMode">
+  <button type="button" class="btn btn-default" (click)="toggleBattleMode()">Exit Battle Mode</button>
+</div>

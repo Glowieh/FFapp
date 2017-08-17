@@ -1,0 +1,17 @@
+<h3>{{title}}</h3>
+<div class="well well-sm chat-window" #chatWindow [scrollTop]="chatWindow.scrollHeight">
+  <div *ngFor="let msg of log">
+    <ng-container *ngIf="msg.senderName != 'None'">
+      {{msg.posted | date:'HH:mm'}} <{{msg.senderName}}> {{msg.message}}
+    </ng-container>
+    <ng-container *ngIf="msg.senderName == 'None'">
+      <span class="sender-none">
+        {{msg.posted | date:'HH:mm'}} {{msg.message}}
+      </span>
+    </ng-container>
+  </div>
+</div>
+<form class="form-inline">
+  <input type="text" name="{{type}}-log" value="" class="form-control stretch-width" [(ngModel)]="message">
+  <button type="button" class="btn btn-default" (click)="sendMessage()">Send</button>
+</form>

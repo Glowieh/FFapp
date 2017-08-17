@@ -1,0 +1,15 @@
+.chat-window {
+  height: 600px;
+  overflow-y: scroll;
+  overflow-wrap: break-word;
+  font-size: small;
+}
+
+.stretch-width {
+  width: calc(100% - 64px);
+}
+
+.sender-none {
+  font-style: italic;
+  color: red;
+}

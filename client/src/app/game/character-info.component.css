@@ -1,0 +1,21 @@
+input[type='number'] {
+  width: 65px;
+}
+
+.delete-item-span {
+  float: right;
+  font-weight: bold;
+}
+
+.inventory {
+  height: 325px;
+  overflow-y: scroll;
+}
+
+.set-input {
+  display: inline-block;
+}
+
+.set-input input {
+  height: 30px;
+}

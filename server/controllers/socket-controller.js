@@ -42,18 +42,21 @@ exports.init = function(io) {
 
       //Initialization done. Message handlers next
 
-      socket.on('ic-message', (message) => {
-        message.posted = new Date();
-        campaignController.saveLogMessage(io, id, message, 'ic');
+      socket.on('ic-message', (packet) => {
+        packet.message.posted = new Date();
+        campaignController.saveLogMessage(io, id, packet.message, 'ic');
+        campaignController.setLastPlayed(io, id, packet.role);
       });
 
-      socket.on('ooc-message', (message) => {
-        message.posted = new Date();
-        campaignController.saveLogMessage(io, id, message, 'ooc');
+      socket.on('ooc-message', (packet) => {
+        packet.message.posted = new Date();
+        campaignController.saveLogMessage(io, id, packet.message, 'ooc');
+        campaignController.setLastPlayed(io, id, packet.role);
       });
 
-      socket.on('update-character', (character) => {
-        characterController.updateByCampaignId(io, id, character);
+      socket.on('update-character', (packet) => {
+        characterController.updateByCampaignId(io, id, packet.character);
+        campaignController.setLastPlayed(io, id, packet.role);
       });
 
     }); //end of async.parallel

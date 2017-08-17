@@ -29,15 +29,15 @@ export class SocketService {
     return observable;
   }
 
-  icMessage(message: LogMessage): void {
-    this.socket.emit('ic-message', message);
+  icMessage(message: LogMessage, role: string): void {
+    this.socket.emit('ic-message', {message: message, role: role});
   }
 
-  oocMessage(message: LogMessage): void {
-    this.socket.emit('ooc-message', message);
+  oocMessage(message: LogMessage, role: string): void {
+    this.socket.emit('ooc-message', {message: message, role: role});
   }
 
-  updateCharacter(character: Character): void {
-    this.socket.emit('update-character', character);
+  updateCharacter(character: Character, role: string): void {
+    this.socket.emit('update-character', {character: character, role: role});
   }
 }

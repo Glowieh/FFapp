@@ -19,7 +19,7 @@ export class CharacterCreationComponent {
   campaign: Campaign;
   roller = new Roller();
   campaignId: string;
-  errorMsg: string;
+  errorMsg: string = "";
   dataAvailable: boolean;
 
   constructor(
@@ -32,7 +32,6 @@ export class CharacterCreationComponent {
     this.campaignId = this.route.snapshot.paramMap.get('id');
     this.backendService.getCampaign(this.campaignId)
       .then(result => {
-        this.errorMsg = "";
         this.campaign = result;
         this.dataAvailable = true;
       },

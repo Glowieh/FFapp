@@ -11,7 +11,7 @@ import { AuthGuard } from './auth-guard.service';
 const routes: Routes = [
   { path: '', component: CampaignListComponent },
   { path: 'campaign-creation',  component: CampaignCreationComponent },
-  { path: 'character-creation/:id',  component: CharacterCreationComponent, canActivate: [AuthGuard] },
+  { path: 'character-creation/:id/:role',  component: CharacterCreationComponent, canActivate: [AuthGuard] },
   { path: 'game/:id/:role', component: GameComponent, canActivate: [AuthGuard] }
 ];
 
