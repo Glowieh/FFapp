@@ -1,25 +1,23 @@
 <div class="col-md-8">
-  <div class="campaign-list">
-    <campaign-subset
-      [campaigns]="campaigns"
-      [type]="'Public'"
-      [privateState]="false"
-      [endState]="false">
-    </campaign-subset>
+  <campaign-subset
+    [campaigns]="campaigns"
+    [type]="'Public'"
+    [privateState]="false"
+    [endState]="false">
+  </campaign-subset>
 
-    <campaign-subset
-      [campaigns]="campaigns"
-      [type]="'Private'"
-      [privateState]="true"
-      [endState]="false">
-    </campaign-subset>
+  <campaign-subset
+    [campaigns]="campaigns"
+    [type]="'Private'"
+    [privateState]="true"
+    [endState]="false">
+  </campaign-subset>
 
-    <campaign-subset
-      [campaigns]="campaigns"
-      [type]="'Finished'"
-      [endState]="true">
-    </campaign-subset>
-  </div>
+  <campaign-subset
+    [campaigns]="campaigns"
+    [type]="'Finished'"
+    [endState]="true">
+  </campaign-subset>
 </div>
 <div class="col-md-4">
   <button type="button" class="create-campaign btn btn-md btn-primary" (click)="gotoCreateCampaign()">Start a new campaign</button>

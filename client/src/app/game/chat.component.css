@@ -11,5 +11,15 @@
 
 .sender-none {
   font-style: italic;
+  color: blue;
+}
+
+.sender-roll-success {
+  font-style: italic;
+  color: green;
+}
+
+.sender-roll-failure {
+  font-style: italic;
   color: red;
 }

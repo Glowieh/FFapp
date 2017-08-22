@@ -38,7 +38,8 @@ exports.updateByCampaignId = function(io, id, character) {
       result.luck = character.luck;
       result.stamina = character.stamina;
       result.gold = character.gold;
-      result.provisions = character.provisions;
+      result.provisions = character.provisions
+      result.items = character.items;
 
       return result.save();
     }

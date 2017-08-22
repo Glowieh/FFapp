@@ -40,4 +40,12 @@ export class SocketService {
   updateCharacter(character: Character, role: string): void {
     this.socket.emit('update-character', {character: character, role: role});
   }
+
+  toggleEnded(role: string): void {
+    this.socket.emit('toggle-ended', {role: role});
+  }
+
+  toggleBattleMode(monsters: Monster[], role: string) {
+    this.socket.emit('toggle-battle', {monsters: monsters, role: role});
+  }
 }

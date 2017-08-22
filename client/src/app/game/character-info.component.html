@@ -3,57 +3,81 @@
 <label>Attributes</label>
 <ul class="list-group">
   <li class="list-group-item">
-    Swordsmanship: {{character.swordsmanship}} / {{character.maxSwordsmanship}}
-    <div *ngIf="role=='GM'" class="set-input">
-      <form class="form-inline">
-        <div class="form-group">
-          <input type="number" class="form-control" name="swordsmanship" [(ngModel)]="swordsmanship">
-          <button type="button" class="btn btn-sm btn-default" *ngIf="role == 'GM'" (click)="set('swordsmanship')">Set</button>
+    <div class="row">
+      <div class="col-md-5">
+          Swordsmanship: {{character.swordsmanship}} / {{character.maxSwordsmanship}}
+      </div>
+      <div class="col-md-7">
+        <div *ngIf="role=='GM'" class="set-input">
+          <form class="form-inline">
+            <div class="form-group">
+              <input type="number" class="form-control" name="swordsmanship" [(ngModel)]="swordsmanship">
+              <button type="button" [disabled]="hasEnded" class="btn btn-sm btn-default" *ngIf="role == 'GM'" (click)="set('swordsmanship')">Set</button>
+            </div>
+          </form>
         </div>
-      </form>
-    </div>
-  </li>
-  <li class="list-group-item">
-    Skill: {{character.skill}} / {{character.maxSkill}}
-    <div *ngIf="role=='GM'" class="set-input">
-      <form class="form-inline">
-        <div class="form-group">
-          <input type="number" class="form-control" name="skill" [(ngModel)]="skill">
-          <button type="button" class="btn btn-sm btn-default" *ngIf="role == 'GM'" (click)="set('skill')">Set</button>
-        </div>
-      </form>
-    </div>
-    <div *ngIf="role=='Player'">
-      Test your skill:
-      <div class="btn-group">
-        <button type="button" class="btn btn-sm btn-default" (click)="testSkill('easy')">Easy</button>
-        <button type="button" class="btn btn-sm btn-default" (click)="testSkill('normal')">Normal</button>
-        <button type="button" class="btn btn-sm btn-default" (click)="testSkill('hard')">Hard</button>
-        <button type="button" class="btn btn-sm btn-default" (click)="testSkill('extreme')">Extreme</button>
       </div>
     </div>
   </li>
   <li class="list-group-item">
-    Luck: {{character.luck}} / {{character.maxLuck}}
-    <div *ngIf="role=='GM'" class="set-input">
-      <form class="form-inline">
-        <div class="form-group">
-          <input type="number" class="form-control" name="luck" [(ngModel)]="luck">
-          <button type="button" class="btn btn-sm btn-default" *ngIf="role == 'GM'" (click)="set('luck')">Set</button>
+    <div class="row">
+      <div class="col-md-5">
+        Skill: {{character.skill}} / {{character.maxSkill}}
+      </div>
+      <div class="col-md-7">
+        <div *ngIf="role=='GM'" class="set-input">
+          <form class="form-inline">
+            <div class="form-group">
+              <input type="number" class="form-control" name="skill" [(ngModel)]="skill">
+              <button type="button" [disabled]="hasEnded" class="btn btn-sm btn-default" *ngIf="role == 'GM'" (click)="set('skill')">Set</button>
+            </div>
+          </form>
         </div>
-      </form>
+        <div *ngIf="role=='Player'">
+          Test your skill:
+          <div class="btn-group">
+            <button type="button" [disabled]="hasEnded" class="btn btn-xs btn-default" (click)="testSkill('easy')">Easy</button>
+            <button type="button" [disabled]="hasEnded" class="btn btn-xs btn-default" (click)="testSkill('normal')">Normal</button>
+            <button type="button" [disabled]="hasEnded" class="btn btn-xs btn-default" (click)="testSkill('hard')">Hard</button>
+            <button type="button" [disabled]="hasEnded" class="btn btn-xs btn-default" (click)="testSkill('extreme')">Extreme</button>
+          </div>
+        </div>
+      </div>
     </div>
-    <button type="button" class="btn btn-sm btn-default"  *ngIf="role=='Player'" (click)="testLuck()">Test your luck</button>
   </li>
   <li class="list-group-item">
-    Stamina: {{character.stamina}} / {{character.maxStamina}}
-    <div *ngIf="role=='GM'" class="set-input">
-      <form class="form-inline">
-        <div class="form-group">
-          <input type="number" class="form-control" name="stamina" [(ngModel)]="stamina">
-          <button type="button" class="btn btn-sm btn-default" *ngIf="role == 'GM'" (click)="set('stamina')">Set</button>
+    <div class="row">
+      <div class="col-md-5">
+        Luck: {{character.luck}} / {{character.maxLuck}}
+      </div>
+      <div class="col-md-7">
+        <div *ngIf="role=='GM'" class="set-input">
+          <form class="form-inline">
+            <div class="form-group">
+              <input type="number" class="form-control" name="luck" [(ngModel)]="luck">
+              <button type="button" [disabled]="hasEnded" class="btn btn-sm btn-default" *ngIf="role == 'GM'" (click)="set('luck')">Set</button>
+            </div>
+          </form>
         </div>
-      </form>
+        <button type="button" [disabled]="hasEnded || character.luck == 0" class="btn btn-sm btn-default" *ngIf="role=='Player'" (click)="testLuck()">Test your luck</button>
+      </div>
+    </div>
+  </li>
+  <li class="list-group-item">
+    <div class="row">
+      <div class="col-md-5">
+        Stamina: {{character.stamina}} / {{character.maxStamina}}
+      </div>
+      <div class="col-md-7">
+        <div *ngIf="role=='GM'" class="set-input">
+          <form class="form-inline">
+            <div class="form-group">
+              <input type="number" class="form-control" name="stamina" [(ngModel)]="stamina">
+              <button type="button" [disabled]="hasEnded" class="btn btn-sm btn-default" *ngIf="role == 'GM'" (click)="set('stamina')">Set</button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
   </li>
 </ul>
@@ -62,38 +86,48 @@
 <div class="inventory">
   <ul class="list-group">
     <li class="list-group-item">
-      Provisions: {{character.provisions}}
-      <div *ngIf="role=='GM'" class="set-input">
-        <form class="form-inline">
-          <div class="form-group">
-            <input type="number" class="form-control" name="provisions" [(ngModel)]="provisions">
-            <button type="button" class="btn btn-sm btn-default" *ngIf="role == 'GM'" (click)="set('provisions')">Set</button>
+      <div class="row">
+        <div class="col-md-5">
+          Provisions: {{character.provisions}}
+        </div>
+        <div class="col-md-7">
+          <div *ngIf="role=='GM'" class="set-input">
+            <form class="form-inline">
+              <div class="form-group">
+                <input type="number" class="form-control" name="provisions" [(ngModel)]="provisions">
+                <button type="button" [disabled]="hasEnded" class="btn btn-sm btn-default" *ngIf="role == 'GM'" (click)="set('provisions')">Set</button>
+              </div>
+            </form>
           </div>
-        </form>
+          <button type="button" class="btn btn-sm btn-default"  *ngIf="role=='Player'" (click)="eatProvision()" [disabled]="battleMode || character.provisions < 1 || hasEnded">Eat a provision</button>
+        </div>
       </div>
-      <button type="button" class="btn btn-sm btn-default"  *ngIf="role=='Player'" (click)="eatProvision()" [disabled]="battleMode || character.provisions < 1">Eat a provision</button>
     </li>
     <li class="list-group-item">
-      Gold: {{character.gold}}
-      <div *ngIf="role=='GM'" class="set-input">
-        <form class="form-inline">
-          <div class="form-group">
-            <input type="number" class="form-control" name="gold" [(ngModel)]="gold">
-            <button type="button" class="btn btn-sm btn-default" *ngIf="role == 'GM'" (click)="set('gold')">Set</button>
+      <div class="row">
+        <div class="col-md-5">
+          Gold: {{character.gold}}
+        </div>
+        <div class="col-md-7">
+          <div *ngIf="role=='GM'" class="set-input">
+            <form class="form-inline">
+              <div class="form-group">
+                <input type="number" class="form-control" name="gold" [(ngModel)]="gold">
+                <button type="button" [disabled]="hasEnded" class="btn btn-sm btn-default" *ngIf="role == 'GM'" (click)="set('gold')">Set</button>
+              </div>
+            </form>
           </div>
-        </form>
+        </div>
       </div>
     </li>
     <li class="list-group-item" *ngFor="let listItem of character.items">
       {{listItem}}
-      <span class="delete-item-span" *ngIf="role=='GM'"><button type="button" class="btn btn-danger btn-xs" (click)="deleteItem(listItem);">&times;</button></span>
+      <span class="delete-item-span" *ngIf="role=='GM'"><button type="button" [disabled]="hasEnded" class="btn btn-danger btn-xs" (click)="deleteItem(listItem);">&times;</button></span>
     </li>
     <li class="list-group-item" *ngIf="role=='GM'">
       <form class="form-inline">
-        <div class="form-group">
-          <input type="text" name="item" class="form-control" id="item" [(ngModel)]="item">
-          <button type="button" class="btn btn-sm btn-success" (click)="addItem();">Add</button>
-        </div>
+        <input type="text" name="item" class="form-control stretch-width" id="item" [(ngModel)]="item">
+        <button type="button" [disabled]="hasEnded" class="btn btn-sm btn-success" (click)="addItem();">Add</button>
       </form>
     </li>
   </ul>

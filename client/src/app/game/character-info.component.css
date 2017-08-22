@@ -19,3 +19,7 @@ input[type='number'] {
 .set-input input {
   height: 30px;
 }
+
+.stretch-width {
+  width: calc(100% - 48px);
+}

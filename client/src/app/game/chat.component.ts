@@ -13,6 +13,7 @@ export class ChatComponent implements OnInit {
   @Input() type: string;
   @Input() role: string;
   @Input() log: LogMessage[];
+  @Input() hasEnded: boolean;
 
   message: string = "";
 

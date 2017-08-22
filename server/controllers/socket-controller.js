@@ -45,7 +45,9 @@ exports.init = function(io) {
       socket.on('ic-message', (packet) => {
         packet.message.posted = new Date();
         campaignController.saveLogMessage(io, id, packet.message, 'ic');
-        campaignController.setLastPlayed(io, id, packet.role);
+        if(packet.message.senderName != "None") {
+          campaignController.setLastPlayed(io, id, packet.role);
+        }
       });
 
       socket.on('ooc-message', (packet) => {
@@ -59,6 +61,15 @@ exports.init = function(io) {
         campaignController.setLastPlayed(io, id, packet.role);
       });
 
+      socket.on('toggle-ended', (packet) => {
+        campaignController.toggleEnded(io, id);
+        campaignController.setLastPlayed(io, id, packet.role);
+      });
+
+      socket.on('toggle-battle', (packet) => {
+        campaignController.toggleBattleMode(io, id, packet.monsters);
+        campaignController.setLastPlayed(io, id, packet.role);
+      });
     }); //end of async.parallel
   }); //end of io.on('connection' ...)
 }

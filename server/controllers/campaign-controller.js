@@ -3,6 +3,8 @@ var passwordHash = require('password-hash');
 
 var Campaign = require('../models/campaign-model');
 
+var monsterController = require('./monster-controller');
+
 ///////API functions
 
 exports.authenticateCampaign = function(req, res, next) {
@@ -129,18 +131,42 @@ exports.setLastPlayed = function(io, id, playedBy) {
   .catch(err => debug('saveLogMessage error: ', err));
 }
 
-/* api->socket
-exports.delete = function(req, res, next) {
-  Campaign.findOne({_id: req.params.id}, function(err, result) {
-    if (err) { return next(err); }
-      //fires the hook to remove related monsters and the player character
-    if(result) {
-      result.remove(function(err) {
-        if (err) { return next(err); }
+exports.toggleEnded = function(io, id) {
+  var promise = Campaign.findById(id).exec();
+  var endState;
 
-        res.sendStatus(200);
-      });
+  promise.then(result => {
+    if(result) {
+      endState = result.hasEnded = !result.hasEnded;
+
+      return result.save();
     }
-    else { res.sendStatus(404); }
-  });
-}*/
+  })
+  .then(() => io.in(id).emit('packet', {type: 'toggle-ended', endState: endState}))
+  .catch(err => debug('toggleEnded error: ', err));
+}
+
+exports.toggleBattleMode = function(io, id, monsters) {
+  var promise = Campaign.findById(id).exec();
+  var battleState;
+
+  promise.then(result => {
+    if(result) {
+      battleState = result.battleMode = !result.battleMode;
+
+      return result.save();
+    }
+  })
+  .then(() => {
+    if(!battleState) {
+      return battleState;
+    }
+
+    return monsterController.setMonsters(id, monsters);
+  })
+  .then((result) => {
+    monsters.forEach((monster, i) => monster._id = result[i]._id);
+    io.in(id).emit('packet', {type: 'toggle-battle', battleState: battleState, monsters: monsters});
+  })
+  .catch(err => debug('toggleBattleMode error: ', err));
+}

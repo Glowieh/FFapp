@@ -13,6 +13,7 @@ export class CharacterInfoComponent implements OnInit {
   @Input() character: Character;
   @Input() role: string;
   @Input() battleMode: boolean;
+  @Input() hasEnded: boolean;
 
   item: string = "";
   swordsmanship: number = 0;
@@ -66,18 +67,21 @@ export class CharacterInfoComponent implements OnInit {
       let roller: Roller = new Roller();
       let result = roller.roll(1, 20);
       let resultText: string;
+      let senderName: string;
 
       if(result <= char.luck) {
         resultText = "succeeded with a roll of " + result + " against luck score " + char.luck + ".";
+        senderName = "RollSuccess";
       }
       else {
         resultText = "failed with a roll of " + result + " against luck score " + char.luck + ".";
+        senderName = "RollFailure";
       }
 
       char.luck--;
 
       this.socketService.updateCharacter(char, this.role);
-      this.socketService.icMessage({senderName: "None", message: "Luck test " + resultText, posted: null}, this.role);
+      this.socketService.icMessage({senderName: senderName, message: "Luck test " + resultText, posted: null}, this.role);
     }
   }
 
@@ -87,21 +91,43 @@ export class CharacterInfoComponent implements OnInit {
     let modifier: number;
     let resultText: string;
     let symbol: string;
+    let senderName;
 
     switch(difficulty){
-      case 'easy': modifier=5;symbol="+";break;
+      case 'easy': modifier=-5;symbol="";break;
       case 'normal': modifier=0;symbol="+";break;
-      case 'hard': modifier=-5;symbol="";break;
-      case 'extreme': modifier=-10;symbol="";break;
+      case 'hard': modifier=5;symbol="+";break;
+      case 'extreme': modifier=10;symbol="+";break;
     }
 
     if(result+modifier <= this.character.skill) {
       resultText = "succeeded with a roll of " + result + symbol + modifier + " = " + (result+modifier) + " against skill score " + this.character.skill + ".";
+      senderName = "RollSuccess";
     }
     else {
       resultText = "failed with a roll of " + result + symbol + modifier + " = " + (result+modifier) + " against skill score " + this.character.skill + ".";
+      senderName = "RollFailure";
     }
 
-    this.socketService.icMessage({senderName: "None", message: "Skill test (" + difficulty + ") " + resultText, posted: null}, this.role);
+    this.socketService.icMessage({senderName: senderName, message: "Skill test (" + difficulty + ") " + resultText, posted: null}, this.role);
+  }
+
+  addItem(): void {
+    if(this.item != "") {
+      let char: Character = this.character;
+
+      char.items.push(this.item);
+      this.socketService.updateCharacter(char, this.role);
+      this.socketService.icMessage({senderName: "None", message: "An item was added to the character's inventory: " + this.item, posted: null}, this.role);
+      this.item = "";
+    }
+  }
+
+  deleteItem(toDelete: string): void {
+    let char: Character = this.character;
+
+    char.items.splice(char.items.indexOf(toDelete), 1);
+    this.socketService.updateCharacter(char, this.role);
+    this.socketService.icMessage({senderName: "None", message: "An item was removed from the character's inventory: " + toDelete, posted: null}, this.role);
   }
 }

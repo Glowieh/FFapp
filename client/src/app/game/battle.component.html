@@ -1,4 +1,4 @@
-<div *ngIf="!battleMode">
+<div *ngIf="!battleMode && role == 'GM'">
   <h3>Battle preparations</h3>
   <form class="form-inline">
     <label for="monsterName">Name: </label>
@@ -7,17 +7,58 @@
     <input type="number" name="monsterCombatSkill" value="" class="form-control" [(ngModel)]="monsterCombatSkill">
     <label for="monsterStamina">Stamina: </label>
     <input type="number" name="monsterStamina" value="" class="form-control" [(ngModel)]="monsterStamina">
-    <button type="button" class="btn btn-default" (click)="addMonster()">Add Monster</button>
+    <button type="button" [disabled]="hasEnded" class="btn btn-default" (click)="addMonster()">Add Monster</button>
   </form>
   <br/>
   <ul class="list-group">
     <li class="list-group-item" *ngFor="let monster of addedMonsters">
-      {{monster.name}} (Combat skill: {{monster.combatSkill}} / Stamina: {{monster.stamina}})
-      <span class="delete-item-span"><button type="button" class="btn btn-danger btn-xs" (click)="deleteAddedMonster(monster);">&times;</button></span>
+      <div class="row">
+        <div class="col-md-3">
+          <strong>{{monster.name}}</strong>
+        </div>
+        <div class="col-md-3">
+          Combat skill: {{monster.combatSkill}}
+        </div>
+        <div class="col-md-3">
+          Stamina: {{monster.stamina}}/{{monster.maxStamina}}
+        </div>
+        <div class="col-md-2">
+        </div>
+        <div class="col-md-1">
+          <span class="delete-item-span"><button type="button" class="btn btn-danger btn-xs" (click)="deleteAddedMonster(monster);">&times;</button></span>
+        </div>
+      </div>
     </li>
   </ul>
-  <button type="button" class="btn btn-default" (click)="toggleBattleMode()">Enter Battle Mode with these monsters</button>
+  <div class="row">
+    <div class="col-md-12">
+      <button type="button" [disabled]="hasEnded" class="btn btn-default" (click)="toggleBattleMode()">Enter Battle Mode with these monsters</button>
+    </div>
+  </div>
 </div>
 <div *ngIf="battleMode">
-  <button type="button" class="btn btn-default" (click)="toggleBattleMode()">Exit Battle Mode</button>
+  <h3>Battle</h3>
+  <ul class="list-group">
+    <li class="list-group-item" *ngFor="let monster of monsters; let i=index">
+      <div class="row">
+        <div class="col-md-3">
+          <strong>{{monster.name}}</strong>
+        </div>
+        <div class="col-md-3">
+          Combat skill: {{monster.combatSkill}}
+        </div>
+        <div class="col-md-3">
+          Stamina: {{monster.stamina}}/{{monster.maxStamina}}
+        </div>
+        <div class="col-md-2">
+          <button *ngIf="role == 'Player'" type="button" [disabled]="hasEnded" class="btn btn-default" (click)="hit(i)">Hit</button>
+        </div>
+      </div>
+    </li>
+  </ul>
+  <div class="row" *ngIf="role == 'GM'">
+    <div class="col-md-12">
+      <button type="button" [disabled]="hasEnded" class="btn btn-default" (click)="toggleBattleMode()">Exit Battle Mode</button>
+    </div>
+  </div>
 </div>

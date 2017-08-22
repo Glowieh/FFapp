@@ -3,6 +3,13 @@ var Monster = require('../models/monster-model');
 
 ///////Socket functions
 
+exports.setMonsters = function(id, monsters) {
+  var promise = Monster.remove({campaignId: id}).exec();
+
+  return promise.then(() => Monster.insertMany(monsters));
+}
+
+
 /* api->socket
 exports.getByCampaignId = function(req, res, next) {
   Monster.find({campaignId: req.params.id}, function(err, result) {

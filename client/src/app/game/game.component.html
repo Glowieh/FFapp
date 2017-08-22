@@ -9,7 +9,8 @@
           [title]="'Out of character chat'"
           [type]="'ooc'"
           [log]="campaign.outOfCharacterLog"
-          [role]="role">
+          [role]="role"
+          [hasEnded]="campaign.hasEnded">
         </chat>
       </div>
       <div class="col-md-4">
@@ -17,29 +18,34 @@
           [title]="'In character chat'"
           [type]="'ic'"
           [log]="campaign.inCharacterLog"
-          [role]="role">
+          [role]="role"
+          [hasEnded]="campaign.hasEnded">
         </chat>
       </div>
       <div class="col-md-4">
         <character-info
           [character]="character"
           [role]="role"
-          [battleMode]="campaign.battleMode">
+          [battleMode]="campaign.battleMode"
+          [hasEnded]="campaign.hasEnded">
         </character-info>
       </div>
     </div>
-
-    <div *ngIf="role == 'GM'">
-      <div class="row">
-        <div class="col-md-8">
-          <battle
-            [battleMode]="campaign.battleMode"
-            [id]="id">
-          </battle>
-        </div>
-        <div class="col-md-4">
+    
+    <div class="row">
+      <div class="col-md-8">
+        <battle
+          [battleMode]="campaign.battleMode"
+          [id]="id"
+          [hasEnded]="campaign.hasEnded"
+          [role]="role"
+          [monsters]="monsters">
+        </battle>
+      </div>
+      <div class="col-md-4">
+        <div *ngIf="role == 'GM'">
           <button type="button" class="btn btn-danger" *ngIf="!campaign.hasEnded" (click)="toggleEnded()">End Campaign</button>
-          <button type="button" class="btn btn-danger" *ngIf="campaign.hasEnded" (click)="toggleEnded()">Resume Campaign</button>
+          <button type="button" class="btn btn-success" *ngIf="campaign.hasEnded" (click)="toggleEnded()">Resume Campaign</button>
         </div>
       </div>
     </div>

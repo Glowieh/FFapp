@@ -1,17 +1,21 @@
 <h3>{{title}}</h3>
 <div class="well well-sm chat-window" #chatWindow [scrollTop]="chatWindow.scrollHeight">
   <div *ngFor="let msg of log">
-    <ng-container *ngIf="msg.senderName != 'None'">
+    <span *ngIf="msg.senderName == 'GM' || msg.senderName == 'Player'">
       {{msg.posted | date:'HH:mm'}} <{{msg.senderName}}> {{msg.message}}
-    </ng-container>
-    <ng-container *ngIf="msg.senderName == 'None'">
-      <span class="sender-none">
-        {{msg.posted | date:'HH:mm'}} {{msg.message}}
-      </span>
-    </ng-container>
+    </span>
+    <span *ngIf="msg.senderName == 'None'" class="sender-none">
+      {{msg.posted | date:'HH:mm'}} {{msg.message}}
+    </span>
+    <span *ngIf="msg.senderName == 'RollSuccess'" class="sender-roll-success">
+      {{msg.posted | date:'HH:mm'}} {{msg.message}}
+    </span>
+    <span *ngIf="msg.senderName == 'RollFailure'" class="sender-roll-failure">
+      {{msg.posted | date:'HH:mm'}} {{msg.message}}
+    </span>
   </div>
 </div>
 <form class="form-inline">
   <input type="text" name="{{type}}-log" value="" class="form-control stretch-width" [(ngModel)]="message">
-  <button type="button" class="btn btn-default" (click)="sendMessage()">Send</button>
+  <button type="button" [disabled]="hasEnded" class="btn btn-default" (click)="sendMessage()">Send</button>
 </form>

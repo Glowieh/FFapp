@@ -53,10 +53,31 @@ export class GameComponent {
       if(packet.type == "update-character") {
         this.character = packet.character;
       }
+
+      if(packet.type == "toggle-ended") {
+        this.campaign.hasEnded = packet.endState;
+      }
+
+      if(packet.type == "toggle-battle") {
+        this.campaign.battleMode = packet.battleState;
+        if(packet.battleState) {
+          this.monsters = packet.monsters;
+        }
+      }
     });
   }
 
   ngOnDestroy() {
     this.connection.unsubscribe();
+  }
+
+  toggleEnded(): void {
+    this.socketService.toggleEnded(this.role);
+    if(this.campaign.hasEnded) {
+      this.socketService.icMessage({senderName: "None", message: "The campaign has been restarted!", posted: null}, this.role);
+    }
+    else {
+      this.socketService.icMessage({senderName: "None", message: "The campaign has ended!", posted: null}, this.role);
+    }
   }
 }

@@ -1,6 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 
+import { SocketService } from '../socket.service';
 import { Monster } from '../misc/monster';
+import { Roller } from '../misc/roller';
 
 @Component({
   selector: 'battle',
@@ -10,13 +12,16 @@ import { Monster } from '../misc/monster';
 export class BattleComponent implements OnInit {
   @Input() battleMode: boolean;
   @Input() id: string;
+  @Input() hasEnded: boolean;
+  @Input() role: string;
+  @Input() monsters: Monster[];
 
   monsterName: string = "";
   monsterCombatSkill: number = 0;
   monsterStamina: number = 0;
   addedMonsters: Monster[] = [];
 
-  constructor() { }
+  constructor(private socketService: SocketService) { }
 
   ngOnInit() {
   }
@@ -39,5 +44,24 @@ export class BattleComponent implements OnInit {
 
   deleteAddedMonster(toDelete: Monster): void {
     this.addedMonsters.splice(this.addedMonsters.indexOf(toDelete), 1);
+  }
+
+  toggleBattleMode(): void {
+    if(this.battleMode || this.addedMonsters.length > 0) {
+      this.socketService.toggleBattleMode(this.addedMonsters, this.role);
+
+      if(this.battleMode) {
+        this.socketService.icMessage({senderName: "None", message: "Exiting battle mode.", posted: null}, this.role);
+      }
+      else {
+        this.socketService.icMessage({senderName: "None", message: "Entering battle mode.", posted: null}, this.role);
+      }
+
+      this.addedMonsters = [];
+    }
+  }
+
+  hit(i: number): void {
+    console.log(this.monsters[i].name);
   }
 }
