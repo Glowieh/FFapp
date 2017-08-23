@@ -37,8 +37,8 @@ export class SocketService {
     this.socket.emit('ooc-message', {message: message, role: role});
   }
 
-  updateCharacter(character: Character, role: string): void {
-    this.socket.emit('update-character', {character: character, role: role});
+  updateCharacter(character: Character, message: LogMessage, role: string): void {
+    this.socket.emit('update-character', {character: character, message: message, role: role});
   }
 
   toggleEnded(role: string): void {

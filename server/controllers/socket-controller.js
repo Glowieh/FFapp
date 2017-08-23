@@ -44,20 +44,19 @@ exports.init = function(io) {
 
       socket.on('ic-message', (packet) => {
         packet.message.posted = new Date();
-        campaignController.saveLogMessage(io, id, packet.message, 'ic');
-        if(packet.message.senderName != "None") {
-          campaignController.setLastPlayed(io, id, packet.role);
-        }
+        campaignController.saveLogMessage(io, id, packet.message, 'ic', true);
+        campaignController.setLastPlayed(io, id, packet.role);
       });
 
       socket.on('ooc-message', (packet) => {
         packet.message.posted = new Date();
-        campaignController.saveLogMessage(io, id, packet.message, 'ooc');
+        campaignController.saveLogMessage(io, id, packet.message, 'ooc', true);
         campaignController.setLastPlayed(io, id, packet.role);
       });
 
       socket.on('update-character', (packet) => {
-        characterController.updateByCampaignId(io, id, packet.character);
+        packet.message.posted = new Date();
+        characterController.updateByCampaignId(io, id, packet.character, packet.message);
         campaignController.setLastPlayed(io, id, packet.role);
       });
 

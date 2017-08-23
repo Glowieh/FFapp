@@ -1,5 +1,7 @@
-var Character = require('../models/character-model');
 var debug = require('debug')('ffapp:character-controller');
+var Character = require('../models/character-model');
+
+var campaignController = require('./campaign-controller');
 
 ///////API functions
 
@@ -28,7 +30,7 @@ exports.create = function(req, res, next) {
 
 ///////Socket functions
 
-exports.updateByCampaignId = function(io, id, character) {
+exports.updateByCampaignId = function(io, id, character, message) {
   var promise = Character.findOne({campaignId: id}).exec();
 
   promise.then(result => {
@@ -44,6 +46,7 @@ exports.updateByCampaignId = function(io, id, character) {
       return result.save();
     }
   })
-  .then(() => io.in(id).emit('packet', {type: 'update-character', character: character}))
+  .then(() => campaignController.saveLogMessage(io, id, message, 'ic', false))
+  .then(() => io.in(id).emit('packet', {type: 'update-character', character: character, message: message}))
   .catch(err => debug('updateByCampaignId error: ', err));
 };

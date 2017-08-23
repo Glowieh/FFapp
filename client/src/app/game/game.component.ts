@@ -52,14 +52,17 @@ export class GameComponent {
 
       if(packet.type == "update-character") {
         this.character = packet.character;
+        this.campaign.inCharacterLog.push(packet.message);
       }
 
       if(packet.type == "toggle-ended") {
         this.campaign.hasEnded = packet.endState;
+        this.campaign.inCharacterLog.push(packet.message);
       }
 
       if(packet.type == "toggle-battle") {
         this.campaign.battleMode = packet.battleState;
+        this.campaign.inCharacterLog.push(packet.message);
         if(packet.battleState) {
           this.monsters = packet.monsters;
         }
@@ -73,11 +76,5 @@ export class GameComponent {
 
   toggleEnded(): void {
     this.socketService.toggleEnded(this.role);
-    if(this.campaign.hasEnded) {
-      this.socketService.icMessage({senderName: "None", message: "The campaign has been restarted!", posted: null}, this.role);
-    }
-    else {
-      this.socketService.icMessage({senderName: "None", message: "The campaign has ended!", posted: null}, this.role);
-    }
   }
 }

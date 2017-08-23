@@ -99,7 +99,8 @@
               </div>
             </form>
           </div>
-          <button type="button" class="btn btn-sm btn-default"  *ngIf="role=='Player'" (click)="eatProvision()" [disabled]="battleMode || character.provisions < 1 || hasEnded">Eat a provision</button>
+          <button type="button" class="btn btn-sm btn-default"  *ngIf="role=='Player'" (click)="eatProvision()"
+          [disabled]="battleMode || character.provisions < 1 || hasEnded || character.stamina == character.maxStamina">Eat a provision</button>
         </div>
       </div>
     </li>

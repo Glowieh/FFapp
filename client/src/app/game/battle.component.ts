@@ -49,14 +49,6 @@ export class BattleComponent implements OnInit {
   toggleBattleMode(): void {
     if(this.battleMode || this.addedMonsters.length > 0) {
       this.socketService.toggleBattleMode(this.addedMonsters, this.role);
-
-      if(this.battleMode) {
-        this.socketService.icMessage({senderName: "None", message: "Exiting battle mode.", posted: null}, this.role);
-      }
-      else {
-        this.socketService.icMessage({senderName: "None", message: "Entering battle mode.", posted: null}, this.role);
-      }
-
       this.addedMonsters = [];
     }
   }

@@ -91,7 +91,7 @@ exports.update = function(req, res, next) {
 
 ///////Socket functions
 
-exports.saveLogMessage = function(io, id, message, type) {
+exports.saveLogMessage = function(io, id, message, type, emit) {
   var promise = Campaign.findById(id).exec();
 
   promise.then(result => {
@@ -107,11 +107,13 @@ exports.saveLogMessage = function(io, id, message, type) {
     }
   })
   .then(() => {
-    if(type == 'ic') {
-      io.in(id).emit('packet', {type: 'ic-message', message: message})
-    }
-    else {
-      io.in(id).emit('packet', {type: 'ooc-message', message: message})
+    if(emit) {
+      if(type == 'ic') {
+        io.in(id).emit('packet', {type: 'ic-message', message: message})
+      }
+      else {
+        io.in(id).emit('packet', {type: 'ooc-message', message: message})
+      }
     }
   })
   .catch(err => debug('saveLogMessage error: ', err));
@@ -134,29 +136,47 @@ exports.setLastPlayed = function(io, id, playedBy) {
 exports.toggleEnded = function(io, id) {
   var promise = Campaign.findById(id).exec();
   var endState;
+  var msg = {senderName: "None", message: "", posted: new Date()};
 
   promise.then(result => {
     if(result) {
       endState = result.hasEnded = !result.hasEnded;
 
+      if(endState) {
+        msg.message = "The campaign has ended!";
+      }
+      else {
+        msg.message = "The campaign has been restarted!";
+      }
+
       return result.save();
     }
   })
-  .then(() => io.in(id).emit('packet', {type: 'toggle-ended', endState: endState}))
+  .then(() => exports.saveLogMessage(io, id, msg, 'ic', false))
+  .then(() => io.in(id).emit('packet', {type: 'toggle-ended', endState: endState, message: msg}))
   .catch(err => debug('toggleEnded error: ', err));
 }
 
 exports.toggleBattleMode = function(io, id, monsters) {
   var promise = Campaign.findById(id).exec();
   var battleState;
+  var msg = {senderName: "None", message: "", posted: new Date()};
 
   promise.then(result => {
     if(result) {
       battleState = result.battleMode = !result.battleMode;
 
+      if(battleState) {
+        msg.message = "Entering battle mode.";
+      }
+      else {
+        msg.message = "Exiting battle mode.";
+      }
+
       return result.save();
     }
   })
+  .then(() => exports.saveLogMessage(io, id, msg, 'ic', false))
   .then(() => {
     if(!battleState) {
       return battleState;
@@ -166,7 +186,7 @@ exports.toggleBattleMode = function(io, id, monsters) {
   })
   .then((result) => {
     monsters.forEach((monster, i) => monster._id = result[i]._id);
-    io.in(id).emit('packet', {type: 'toggle-battle', battleState: battleState, monsters: monsters});
+    io.in(id).emit('packet', {type: 'toggle-battle', battleState: battleState, monsters: monsters, message: msg});
   })
   .catch(err => debug('toggleBattleMode error: ', err));
 }

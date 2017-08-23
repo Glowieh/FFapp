@@ -41,8 +41,7 @@ export class CharacterInfoComponent implements OnInit {
       case 'provisions': char.provisions = num = this.provisions; break;
     }
 
-    this.socketService.updateCharacter(char, this.role);
-    this.socketService.icMessage({senderName: "None", message: "The character's " + stat + " was changed to " + num + ".", posted: null}, this.role);
+    this.socketService.updateCharacter(char, {senderName: "None", message: "The character's " + stat + " was changed to " + num + ".", posted: null}, this.role);
   }
 
   eatProvision(): void {
@@ -56,8 +55,7 @@ export class CharacterInfoComponent implements OnInit {
         char.stamina = char.maxStamina;
       }
 
-      this.socketService.updateCharacter(char, this.role);
-      this.socketService.icMessage({senderName: "None", message: char.name + " ate a provision.", posted: null}, this.role);
+      this.socketService.updateCharacter(char, {senderName: "None", message: char.name + " ate a provision.", posted: null}, this.role);
     }
   }
 
@@ -80,8 +78,7 @@ export class CharacterInfoComponent implements OnInit {
 
       char.luck--;
 
-      this.socketService.updateCharacter(char, this.role);
-      this.socketService.icMessage({senderName: senderName, message: "Luck test " + resultText, posted: null}, this.role);
+      this.socketService.updateCharacter(char, {senderName: senderName, message: "Luck test " + resultText, posted: null}, this.role);
     }
   }
 
@@ -117,8 +114,7 @@ export class CharacterInfoComponent implements OnInit {
       let char: Character = this.character;
 
       char.items.push(this.item);
-      this.socketService.updateCharacter(char, this.role);
-      this.socketService.icMessage({senderName: "None", message: "An item was added to the character's inventory: " + this.item, posted: null}, this.role);
+      this.socketService.updateCharacter(char, {senderName: "None", message: "An item was added to the character's inventory: " + this.item, posted: null}, this.role);
       this.item = "";
     }
   }
@@ -127,7 +123,6 @@ export class CharacterInfoComponent implements OnInit {
     let char: Character = this.character;
 
     char.items.splice(char.items.indexOf(toDelete), 1);
-    this.socketService.updateCharacter(char, this.role);
-    this.socketService.icMessage({senderName: "None", message: "An item was removed from the character's inventory: " + toDelete, posted: null}, this.role);
+    this.socketService.updateCharacter(char, {senderName: "None", message: "An item was removed from the character's inventory: " + toDelete, posted: null}, this.role);
   }
 }
