@@ -32,7 +32,7 @@
   </ul>
   <div class="row">
     <div class="col-md-12">
-      <button type="button" [disabled]="hasEnded" class="btn btn-default" (click)="toggleBattleMode()">Enter Battle Mode with these monsters</button>
+      <button type="button" [disabled]="hasEnded || addedMonsters.length == 0" class="btn btn-default" (click)="toggleBattleMode()">Enter Battle Mode with these monsters</button>
     </div>
   </div>
 </div>
@@ -46,12 +46,29 @@
         </div>
         <div class="col-md-3">
           Combat skill: {{monster.combatSkill}}
+          <div *ngIf="role=='GM'" class="set-input">
+            <form class="form-inline">
+              <div class="form-group">
+                <input type="number" class="form-control" name="combatSkill-i" [(ngModel)]="combatSkillSetters[i]">
+                <button type="button" [disabled]="hasEnded" class="btn btn-sm btn-default" (click)="set('combat skill', i)">Set</button>
+              </div>
+            </form>
+          </div>
         </div>
         <div class="col-md-3">
           Stamina: {{monster.stamina}}/{{monster.maxStamina}}
+          <div *ngIf="role=='GM'" class="set-input">
+            <form class="form-inline">
+              <div class="form-group">
+                <input type="number" class="form-control" name="stamina-i" [(ngModel)]="staminaSetters[i]">
+                <button type="button" [disabled]="hasEnded" class="btn btn-sm btn-default" (click)="set('stamina', i)">Set</button>
+              </div>
+            </form>
+          </div>
         </div>
         <div class="col-md-2">
-          <button *ngIf="role == 'Player'" type="button" [disabled]="hasEnded" class="btn btn-default" (click)="hit(i)">Hit</button>
+          <button *ngIf="role == 'Player'" type="button" [disabled]="hasEnded" class="btn btn-default" (click)="battleRound(i)">Hit</button>
+          <span *ngIf="role == 'GM'" class="delete-item-span-battle"><button type="button" class="btn btn-danger btn-xs" (click)="deleteMonster(i);">&times;</button></span>
         </div>
       </div>
     </li>

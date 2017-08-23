@@ -44,29 +44,48 @@ exports.init = function(io) {
 
       socket.on('ic-message', (packet) => {
         packet.message.posted = new Date();
-        campaignController.saveLogMessage(io, id, packet.message, 'ic', true);
+        campaignController.saveLogMessage(io, id, [packet.message], 'ic', true);
         campaignController.setLastPlayed(io, id, packet.role);
       });
 
       socket.on('ooc-message', (packet) => {
         packet.message.posted = new Date();
-        campaignController.saveLogMessage(io, id, packet.message, 'ooc', true);
+        campaignController.saveLogMessage(io, id, [packet.message], 'ooc', true);
         campaignController.setLastPlayed(io, id, packet.role);
       });
 
       socket.on('update-character', (packet) => {
         packet.message.posted = new Date();
-        characterController.updateByCampaignId(io, id, packet.character, packet.message);
+        characterController.updateByCampaignId(io, id, packet.character, packet.message, true);
         campaignController.setLastPlayed(io, id, packet.role);
       });
 
       socket.on('toggle-ended', (packet) => {
-        campaignController.toggleEnded(io, id);
+        campaignController.toggleEnded(io, id, true);
         campaignController.setLastPlayed(io, id, packet.role);
       });
 
       socket.on('toggle-battle', (packet) => {
-        campaignController.toggleBattleMode(io, id, packet.monsters);
+        campaignController.toggleBattleMode(io, id, packet.monsters, true);
+        campaignController.setLastPlayed(io, id, packet.role);
+      });
+
+      socket.on('battle-round', (packet) => {
+        packet.messages.forEach((msg) => msg.posted = new Date());
+
+        monsterController.battleRound(io, id, packet.character, packet.monsters, packet.messages);
+        campaignController.setLastPlayed(io, id, packet.role);
+      });
+
+      socket.on('update-monster', (packet) => {
+        packet.message.posted = new Date();
+        monsterController.update(io, id, packet.monster, packet.message);
+        campaignController.setLastPlayed(io, id, packet.role);
+      });
+
+      socket.on('delete-monster', (packet) => {
+        packet.message.posted = new Date();
+        monsterController.delete(io, id, packet.monsterId, packet.message);
         campaignController.setLastPlayed(io, id, packet.role);
       });
     }); //end of async.parallel

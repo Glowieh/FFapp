@@ -30,10 +30,10 @@ exports.create = function(req, res, next) {
 
 ///////Socket functions
 
-exports.updateByCampaignId = function(io, id, character, message) {
+exports.updateByCampaignId = function(io, id, character, message, emit) {
   var promise = Character.findOne({campaignId: id}).exec();
 
-  promise.then(result => {
+  return promise.then(result => {
     if(result) {
       result.swordsmanship = character.swordsmanship;
       result.skill = character.skill;
@@ -46,7 +46,15 @@ exports.updateByCampaignId = function(io, id, character, message) {
       return result.save();
     }
   })
-  .then(() => campaignController.saveLogMessage(io, id, message, 'ic', false))
-  .then(() => io.in(id).emit('packet', {type: 'update-character', character: character, message: message}))
+  .then(() => {
+    if(emit) {
+      campaignController.saveLogMessage(io, id, [message], 'ic', false);
+    }
+  })
+  .then(() => {
+    if(emit) {
+      io.in(id).emit('packet', {type: 'update-character', character: character, message: message});
+    }
+  })
   .catch(err => debug('updateByCampaignId error: ', err));
 };

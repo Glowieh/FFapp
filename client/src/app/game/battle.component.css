@@ -3,6 +3,20 @@
   font-weight: bold;
 }
 
+.delete-item-span-battle {
+  float: right;
+  font-weight: bold;
+  margin-top: 14px;
+}
+
 input[type='number'] {
   width: 65px;
+}
+
+.set-input {
+  display: inline-block;
+}
+
+.set-input input {
+  height: 30px;
 }

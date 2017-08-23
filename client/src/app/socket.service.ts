@@ -48,4 +48,16 @@ export class SocketService {
   toggleBattleMode(monsters: Monster[], role: string) {
     this.socket.emit('toggle-battle', {monsters: monsters, role: role});
   }
+
+  battleRound(character: Character, monsters: Monster[], messages: LogMessage[], role: string) {
+    this.socket.emit('battle-round', {character: character, monsters: monsters, messages: messages, role: role});
+  }
+
+  updateMonster(monster: Monster, message: LogMessage, role: string) {
+    this.socket.emit('update-monster', {monster: monster, message: message, role: role});
+  }
+
+  deleteMonster(id: string, message: LogMessage, role: string) {
+    this.socket.emit('delete-monster', {monsterId: id, message: message, role: role});
+  }
 }

@@ -22,8 +22,8 @@
         <button type="button" class="btn btn-success" (click)="enter(campaign, 'Player')">Enter as Player</button>
       </div>
     </div>
-    <span>Started: {{campaign.creationTime | date}}</span>
-    <span *ngIf="campaign.lastPlayBy != 'None'">Last play by: {{campaign.lastPlayBy}} on {{campaign.lastPlayTime | date}}</span>
+    <span>Started: {{campaign.creationTime | date:"MMM d, y HH:mm"}}</span>
+    <span *ngIf="campaign.lastPlayBy != 'None'">Last play by: {{campaign.lastPlayBy}} on {{campaign.lastPlayTime | date:"MMM d, y HH:mm"}}</span>
     <span *ngIf="campaign.lastPlayBy == 'None'">Waiting for character</span>
     <span>{{campaign.description}}</span>
   </div>

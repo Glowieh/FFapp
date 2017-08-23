@@ -66,13 +66,14 @@ export class CharacterInfoComponent implements OnInit {
       let result = roller.roll(1, 20);
       let resultText: string;
       let senderName: string;
+      let target: number = 20;
 
-      if(result <= char.luck) {
-        resultText = "succeeded with a roll of " + result + " against luck score " + char.luck + ".";
+      if(result+char.luck >= target) {
+        resultText = "succeeded (" + (result+char.luck) + " vs " + target + ").";
         senderName = "RollSuccess";
       }
       else {
-        resultText = "failed with a roll of " + result + " against luck score " + char.luck + ".";
+        resultText = "failed (" + (result+char.luck) + " vs " + target + ").";
         senderName = "RollFailure";
       }
 
@@ -85,24 +86,24 @@ export class CharacterInfoComponent implements OnInit {
   testSkill(difficulty: string): void {
     let roller: Roller = new Roller();
     let result = roller.roll(1, 20);
-    let modifier: number;
+    let target: number;
     let resultText: string;
     let symbol: string;
     let senderName;
 
     switch(difficulty){
-      case 'easy': modifier=-5;symbol="";break;
-      case 'normal': modifier=0;symbol="+";break;
-      case 'hard': modifier=5;symbol="+";break;
-      case 'extreme': modifier=10;symbol="+";break;
+      case 'easy': target=15;break;
+      case 'normal': target=20;break;
+      case 'hard': target=25;break;
+      case 'extreme': target=30;break;
     }
 
-    if(result+modifier <= this.character.skill) {
-      resultText = "succeeded with a roll of " + result + symbol + modifier + " = " + (result+modifier) + " against skill score " + this.character.skill + ".";
+    if(result+this.character.skill >= target) {
+      resultText = "succeeded (" + (result+this.character.skill) + " vs " + target + ").";
       senderName = "RollSuccess";
     }
     else {
-      resultText = "failed with a roll of " + result + symbol + modifier + " = " + (result+modifier) + " against skill score " + this.character.skill + ".";
+      resultText = "failed (" + (result+this.character.skill) + " vs " + target + ").";
       senderName = "RollFailure";
     }
 

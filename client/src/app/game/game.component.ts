@@ -67,6 +67,30 @@ export class GameComponent {
           this.monsters = packet.monsters;
         }
       }
+
+      if(packet.type == "battle-round") {
+        this.character = packet.character;
+        this.monsters = packet.monsters;
+        packet.messages.forEach((msg) => this.campaign.inCharacterLog.push(msg));
+
+        if(this.character.stamina <= 0) {
+          this.campaign.hasEnded = !this.campaign.hasEnded;
+        }
+
+        if(this.monsters.length == 0) {
+          this.campaign.battleMode = !this.campaign.battleMode;
+        }
+      }
+
+      if(packet.type == "update-monster") {
+        this.monsters[this.monsters.findIndex((m) => m._id == packet.monster._id)] = packet.monster;
+        this.campaign.inCharacterLog.push(packet.message);
+      }
+
+      if(packet.type == "delete-monster") {
+        this.monsters.splice(this.monsters.findIndex((m) => m._id == packet.monsterId), 1);
+        this.campaign.inCharacterLog.push(packet.message);
+      }
     });
   }
 

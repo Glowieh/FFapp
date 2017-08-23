@@ -91,16 +91,16 @@ exports.update = function(req, res, next) {
 
 ///////Socket functions
 
-exports.saveLogMessage = function(io, id, message, type, emit) {
+exports.saveLogMessage = function(io, id, messages, type, emit) {
   var promise = Campaign.findById(id).exec();
 
-  promise.then(result => {
+  return promise.then(result => {
     if(result) {
       if(type == 'ic') {
-        result.inCharacterLog.push(message);
+        messages.forEach((msg) => result.inCharacterLog.push(msg));
       }
       else {
-        result.outOfCharacterLog.push(message);
+        messages.forEach((msg) => result.outOfCharacterLog.push(msg));
       }
 
       return result.save();
@@ -109,10 +109,10 @@ exports.saveLogMessage = function(io, id, message, type, emit) {
   .then(() => {
     if(emit) {
       if(type == 'ic') {
-        io.in(id).emit('packet', {type: 'ic-message', message: message})
+        io.in(id).emit('packet', {type: 'ic-message', message: messages[0]})  //when emit = true, there's only one message in the array
       }
       else {
-        io.in(id).emit('packet', {type: 'ooc-message', message: message})
+        io.in(id).emit('packet', {type: 'ooc-message', message: messages[0]})
       }
     }
   })
@@ -122,7 +122,7 @@ exports.saveLogMessage = function(io, id, message, type, emit) {
 exports.setLastPlayed = function(io, id, playedBy) {
   var promise = Campaign.findById(id).exec();
 
-  promise.then(result => {
+  return promise.then(result => {
     if(result) {
       result.lastPlayBy = playedBy;
       result.lastPlayTime = new Date();
@@ -130,15 +130,15 @@ exports.setLastPlayed = function(io, id, playedBy) {
       return result.save();
     }
   })
-  .catch(err => debug('saveLogMessage error: ', err));
+  .catch(err => debug('setLastPlayed error: ', err));
 }
 
-exports.toggleEnded = function(io, id) {
+exports.toggleEnded = function(io, id, emit) {
   var promise = Campaign.findById(id).exec();
   var endState;
   var msg = {senderName: "None", message: "", posted: new Date()};
 
-  promise.then(result => {
+  return promise.then(result => {
     if(result) {
       endState = result.hasEnded = !result.hasEnded;
 
@@ -152,17 +152,25 @@ exports.toggleEnded = function(io, id) {
       return result.save();
     }
   })
-  .then(() => exports.saveLogMessage(io, id, msg, 'ic', false))
-  .then(() => io.in(id).emit('packet', {type: 'toggle-ended', endState: endState, message: msg}))
+  .then(() => {
+    if(emit) {
+      exports.saveLogMessage(io, id, [msg], 'ic', false);
+    }
+  })
+  .then(() => {
+    if(emit) {
+      io.in(id).emit('packet', {type: 'toggle-ended', endState: endState, message: msg});
+    }
+  })
   .catch(err => debug('toggleEnded error: ', err));
 }
 
-exports.toggleBattleMode = function(io, id, monsters) {
+exports.toggleBattleMode = function(io, id, monsters, emit) {
   var promise = Campaign.findById(id).exec();
   var battleState;
   var msg = {senderName: "None", message: "", posted: new Date()};
 
-  promise.then(result => {
+  return promise.then(result => {
     if(result) {
       battleState = result.battleMode = !result.battleMode;
 
@@ -176,17 +184,27 @@ exports.toggleBattleMode = function(io, id, monsters) {
       return result.save();
     }
   })
-  .then(() => exports.saveLogMessage(io, id, msg, 'ic', false))
+  .then(() => {
+    exports.saveLogMessage(io, id, [msg], 'ic', false)
+  })
   .then(() => {
     if(!battleState) {
       return battleState;
     }
-
-    return monsterController.setMonsters(id, monsters);
+    else {
+      return monsterController.setMonsters(id, monsters);
+    }
   })
   .then((result) => {
-    monsters.forEach((monster, i) => monster._id = result[i]._id);
-    io.in(id).emit('packet', {type: 'toggle-battle', battleState: battleState, monsters: monsters, message: msg});
+    if(battleState) {
+      monsters.forEach((monster, i) => monster._id = result[i]._id);
+    }
+    if(emit) {
+      io.in(id).emit('packet', {type: 'toggle-battle', battleState: battleState, monsters: monsters, message: msg});
+    }
+    else {
+      return msg;
+    }
   })
   .catch(err => debug('toggleBattleMode error: ', err));
 }
