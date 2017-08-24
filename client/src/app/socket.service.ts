@@ -12,7 +12,7 @@ export class SocketService {
 
   connect(id: string) {
     let url: string = window.location.host + '/?id=' + id;
-    console.log("Connecting to: " + url);
+    //console.log("Connecting to: " + url);
 
     let observable = new Observable(observer => {
       this.socket = io(url);

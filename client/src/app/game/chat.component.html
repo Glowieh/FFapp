@@ -16,6 +16,6 @@
   </div>
 </div>
 <form class="form-inline">
-  <input type="text" name="{{type}}-log" value="" class="form-control stretch-width" [(ngModel)]="message">
+  <input type="text" name="{{type}}-log" value="" class="form-control stretch-width" (keyup.enter)="sendMessage()" [(ngModel)]="message">
   <button type="button" [disabled]="hasEnded" class="btn btn-default" (click)="sendMessage()">Send</button>
 </form>

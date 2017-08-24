@@ -34,6 +34,10 @@ export class BattleComponent implements OnInit {
   addMonster(): void {
     let monster = new Monster();
 
+    if(this.monsterName.length == 0 || this.monsterCombatSkill < 1 || this.monsterStamina < 1) {
+      return;
+    }
+
     monster.name = this.monsterName;
     monster.combatSkill = this.monsterCombatSkill;
     monster.stamina = this.monsterStamina;
@@ -59,7 +63,7 @@ export class BattleComponent implements OnInit {
   }
 
   set(stat: string, i: number): void {
-    let monster: Monster = this.monsters[i];
+    let monster: Monster = Object.assign({}, this.monsters[i]);
     let change: number;
 
     if(stat == "combat skill") {
@@ -91,7 +95,7 @@ export class BattleComponent implements OnInit {
     messages.push(this.hit(i, true));
 
     this.monsters.forEach((monster, index) => {
-      if(index != i) {
+      if(index != i && this.character.stamina > 0) {
         messages.push(this.hit(index, false));
       }
     });

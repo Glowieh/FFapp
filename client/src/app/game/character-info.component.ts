@@ -29,7 +29,7 @@ export class CharacterInfoComponent implements OnInit {
   }
 
   set(stat: string): void {
-    let char: Character = this.character;
+    let char: Character = Object.assign({}, this.character);
     let num: number;
 
     switch(stat) {
@@ -39,6 +39,10 @@ export class CharacterInfoComponent implements OnInit {
       case 'stamina': char.stamina = num = this.stamina; break;
       case 'gold': char.gold = num = this.gold; break;
       case 'provisions': char.provisions = num = this.provisions; break;
+    }
+
+    if(num < 0) {
+      return;
     }
 
     this.socketService.updateCharacter(char, {senderName: "None", message: "The character's " + stat + " was changed to " + num + ".", posted: null}, this.role);

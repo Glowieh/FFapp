@@ -11,6 +11,11 @@ export class AuthGuard implements CanActivate {
 
   canActivate(route: ActivatedRouteSnapshot) {
     let id = route.paramMap.get('id');
+    let role = route.paramMap.get('role');
+
+    if(!(role == 'GM' || role == 'Player')) {
+      return false;
+    }
 
     if(this.backendService.campaignPasswords[id]) {
       return this.backendService.authenticateCampaign(id, this.backendService.campaignPasswords[id]);

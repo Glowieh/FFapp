@@ -33,7 +33,7 @@ export class GameComponent {
 
     this.connection = this.socketService.connect(this.id)
     .subscribe((packet: any) => {
-      console.log("Got a packet: ", packet);
+      //console.log("Got a packet: ", packet);
 
       if(packet.type == "init") {
         this.character = packet.character;

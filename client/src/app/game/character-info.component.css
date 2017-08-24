@@ -23,3 +23,7 @@ input[type='number'] {
 .stretch-width {
   width: calc(100% - 48px);
 }
+
+.no-right-padding {
+  padding-right: 0px !important;
+}

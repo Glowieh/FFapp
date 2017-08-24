@@ -25,7 +25,7 @@
         <div class="col-md-2">
         </div>
         <div class="col-md-1">
-          <span class="delete-item-span"><button type="button" class="btn btn-danger btn-xs" (click)="deleteAddedMonster(monster);">&times;</button></span>
+          <span class="delete-item-span"><button type="button" class="btn btn-danger btn-xs" [disabled]="hasEnded" (click)="deleteAddedMonster(monster);">&times;</button></span>
         </div>
       </div>
     </li>
@@ -67,8 +67,8 @@
           </div>
         </div>
         <div class="col-md-2">
-          <button *ngIf="role == 'Player'" type="button" [disabled]="hasEnded" class="btn btn-default" (click)="battleRound(i)">Hit</button>
-          <span *ngIf="role == 'GM'" class="delete-item-span-battle"><button type="button" class="btn btn-danger btn-xs" (click)="deleteMonster(i);">&times;</button></span>
+          <button *ngIf="role == 'Player'" type="button" [disabled]="hasEnded" class="btn btn-sm btn-default" (click)="battleRound(i)">Hit</button>
+          <span *ngIf="role == 'GM'" class="delete-item-span-battle"><button type="button" class="btn btn-danger btn-xs" [disabled]="hasEnded" (click)="deleteMonster(i);">&times;</button></span>
         </div>
       </div>
     </li>

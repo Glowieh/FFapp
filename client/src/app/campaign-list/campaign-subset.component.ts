@@ -16,8 +16,8 @@ export class CampaignSubsetComponent {
   @Input() privateState: boolean;
   @Input() endState: boolean;
 
-  password: string;
-  errorMsg: string;
+  passwords: string[] = [];
+  errorMsgs: string[] = [];
 
   constructor(
     private backendService: BackendService,
@@ -37,11 +37,11 @@ export class CampaignSubsetComponent {
     this.router.navigate([url, campaign._id, role]);
   }
 
-  enterPassword(campaign: Campaign, role: string): void {
-    this.errorMsg = null;
+  enterPassword(campaign: Campaign, role: string, i: number): void {
+    this.errorMsgs[i] = null;
     let url: string;
 
-    this.backendService.campaignPasswords[campaign._id] = this.password;
+    this.backendService.campaignPasswords[campaign._id] = this.passwords[i];
     if(campaign.lastPlayBy == "None") {
       url = '/character-creation/';
     }
@@ -52,12 +52,12 @@ export class CampaignSubsetComponent {
     this.router.navigate([url, campaign._id, role])
     .then((result) => {
       if(!result) {
-        this.errorMsg = "Wrong password!";
+        this.errorMsgs[i] = "Wrong password!";
       }
       else {
-        this.errorMsg = "Unexpected error!";
+        this.errorMsgs[i] = "Unexpected error!";
       }
     },
-    () => this.errorMsg = "Unexpected error!");
+    () => this.errorMsgs[i] = "Unexpected error!");
   }
 }
