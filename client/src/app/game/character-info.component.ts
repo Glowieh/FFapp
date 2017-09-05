@@ -49,66 +49,18 @@ export class CharacterInfoComponent implements OnInit {
 
   eatProvision(): void {
     if(this.character.provisions > 0 && this.character.stamina < this.character.maxStamina) {
-      let char: Character = this.character;
-
-      char.provisions--;
-      char.stamina += 4;
-
-      if(char.stamina > char.maxStamina) {
-        char.stamina = char.maxStamina;
-      }
-
-      this.socketService.updateCharacter(char, {senderName: "None", message: char.name + " ate a provision.", posted: null}, this.role);
+      this.socketService.eatProvision();
     }
   }
 
   testLuck(): void {
     if(this.character.luck > 0) {
-      let char: Character = this.character;
-      let result = 0;//roller.roll(1, 20);
-      let resultText: string;
-      let senderName: string;
-      let target: number = 20;
-
-      if(result+char.luck >= target) {
-        resultText = "succeeded (" + (result+char.luck) + " vs " + target + ").";
-        senderName = "RollSuccess";
-      }
-      else {
-        resultText = "failed (" + (result+char.luck) + " vs " + target + ").";
-        senderName = "RollFailure";
-      }
-
-      char.luck--;
-
-      this.socketService.updateCharacter(char, {senderName: senderName, message: "Luck test " + resultText, posted: null}, this.role);
+      this.socketService.testAttribute('luck', null);
     }
   }
 
   testSkill(difficulty: string): void {
-    let result = 0;//roller.roll(1, 20);
-    let target: number;
-    let resultText: string;
-    let symbol: string;
-    let senderName;
-
-    switch(difficulty){
-      case 'easy': target=15;break;
-      case 'normal': target=20;break;
-      case 'hard': target=25;break;
-      case 'extreme': target=30;break;
-    }
-
-    if(result+this.character.skill >= target) {
-      resultText = "succeeded (" + (result+this.character.skill) + " vs " + target + ").";
-      senderName = "RollSuccess";
-    }
-    else {
-      resultText = "failed (" + (result+this.character.skill) + " vs " + target + ").";
-      senderName = "RollFailure";
-    }
-
-    this.socketService.icMessage({senderName: senderName, message: "Skill test (" + difficulty + ") " + resultText, posted: null}, this.role);
+    this.socketService.testAttribute('skill', difficulty);
   }
 
   addItem(): void {

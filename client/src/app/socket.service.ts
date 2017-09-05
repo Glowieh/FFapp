@@ -41,6 +41,14 @@ export class SocketService {
     this.socket.emit('update-character', {character: character, message: message, role: role});
   }
 
+  eatProvision(): void {
+    this.socket.emit('eat-provision');
+  }
+
+  testAttribute(stat: string, difficulty: string): void {
+    this.socket.emit('test-attribute', {stat: stat, difficulty: difficulty});
+  }
+
   toggleEnded(role: string): void {
     this.socket.emit('toggle-ended', {role: role});
   }
@@ -49,8 +57,8 @@ export class SocketService {
     this.socket.emit('toggle-battle', {monsters: monsters, role: role});
   }
 
-  battleRound(character: Character, monsters: Monster[], messages: LogMessage[], role: string) {
-    this.socket.emit('battle-round', {character: character, monsters: monsters, messages: messages, role: role});
+  battleRound(hitTarget) {
+    this.socket.emit('battle-round', {hitTarget: hitTarget});
   }
 
   updateMonster(monster: Monster, message: LogMessage, role: string) {

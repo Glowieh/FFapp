@@ -77,6 +77,16 @@ exports.init = function(io) {
         campaignController.setLastPlayed(io, id, packet.role);
       });
 
+      socket.on('eat-provision', (packet) => {
+        characterController.eatProvision(io, id);
+        campaignController.setLastPlayed(io, id, "Player");
+      });
+
+      socket.on('test-attribute', (packet) => {
+        characterController.testAttribute(io, id, packet.stat, packet.difficulty);
+        campaignController.setLastPlayed(io, id, "Player");
+      });
+
       socket.on('toggle-ended', (packet) => {
         campaignController.toggleEnded(io, id, true);
         campaignController.setLastPlayed(io, id, packet.role);
@@ -88,10 +98,8 @@ exports.init = function(io) {
       });
 
       socket.on('battle-round', (packet) => {
-        packet.messages.forEach((msg) => msg.posted = new Date());
-
-        monsterController.battleRound(io, id, packet.character, packet.monsters, packet.messages);
-        campaignController.setLastPlayed(io, id, packet.role);
+        monsterController.battleRound(io, id, packet.hitTarget);
+        campaignController.setLastPlayed(io, id, 'Player');
       });
 
       socket.on('update-monster', (packet) => {

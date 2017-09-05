@@ -41,6 +41,11 @@ exports.getByCampaignId = function(req, res, next) {
   });
 };
 
+exports.getCharacterByCampaignId = function(id) {
+  var promise = Character.findOne({campaignId: id}).exec();
+  return promise.then(result => result);
+};
+
 exports.update = function(req, res, next) {
   Character.findOne({campaignId: req.body.campaignId}, function(err, result) {
     if(err) { return next(err); }
@@ -138,4 +143,93 @@ exports.updateByCampaignId = function(io, id, character, message, emit) {
     }
   })
   .catch(err => debug('updateByCampaignId error: ', err));
+};
+
+exports.eatProvision = function(io, id) {
+  var promise = Character.findOne({campaignId: id}).exec();
+  var character, message;
+
+  return promise.then(result => {
+    if(result && result.provisions > 0) {
+      result.provisions--;
+      result.stamina += 4;
+      if(result.stamina > result.maxStamina) {
+        result.stamina = result.maxStamina;
+      }
+      character = result;
+
+      return result.save();
+    }
+  })
+  .then(() => {
+    message = {senderName: "None", message: "The character ate a provision.", posted: new Date()};
+    return campaignController.saveLogMessage(io, id, [message], 'ic', false);
+  })
+  .then(() => {
+    io.in(id).emit('packet', {type: 'update-character', character: character, message: message});
+  })
+  .catch(err => debug('eatProvision error: ', err));
+};
+
+exports.testAttribute = function(io, id, stat, difficulty) {
+  var promise = Character.findOne({campaignId: id}).exec();
+  var character, message;
+
+  return promise.then(result => {
+    if(result) {
+      if(stat == 'luck') {
+        let rollResult = roll(1, 20);
+        let resultText;
+        let senderName;
+        let target = 20;
+
+        if(rollResult+result.luck >= target) {
+          resultText = "Luck test succeeded (" + (rollResult+result.luck) + " vs " + target + ").";
+          senderName = "RollSuccess";
+        }
+        else {
+          resultText = "Luck test failed (" + (rollResult+result.luck) + " vs " + target + ").";
+          senderName = "RollFailure";
+        }
+
+        message = {senderName: senderName, message: resultText, posted: new Date()};
+        result.luck--;
+        character = result;
+
+        return result.save();
+      }
+      else if(stat == 'skill') {
+        let rollResult = roll(1, 20);
+        let target;
+        let resultText;
+        let senderName;
+
+        switch(difficulty){
+          case 'easy': target=15;break;
+          case 'normal': target=20;break;
+          case 'hard': target=25;break;
+          case 'extreme': target=30;break;
+        }
+
+        if(rollResult+result.skill >= target) {
+          resultText = "Skill test (" + difficulty + ") succeeded (" + (rollResult+result.skill) + " vs " + target + ").";
+          senderName = "RollSuccess";
+        }
+        else {
+          resultText = "Skill test (" + difficulty + ") failed (" + (rollResult+result.skill) + " vs " + target + ").";
+          senderName = "RollFailure";
+        }
+
+        message = {senderName: senderName, message: resultText, posted: new Date()};
+        character = result;
+      }
+    }
+  })
+  .then(() => {
+    return campaignController.saveLogMessage(io, id, [message], 'ic', false);
+  })
+  .then(() => {
+    io.in(id).emit('packet', {type: 'update-character', character: character, message: message});
+  })
+  .catch(err => debug('testAttribute error: ', err));
 };
