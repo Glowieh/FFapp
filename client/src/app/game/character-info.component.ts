@@ -2,7 +2,6 @@ import { Component, OnInit, Input } from '@angular/core';
 
 import { SocketService } from '../socket.service';
 import { Character } from '../misc/character';
-import { Roller } from '../misc/roller';
 
 @Component({
   selector: 'character-info',
@@ -66,8 +65,7 @@ export class CharacterInfoComponent implements OnInit {
   testLuck(): void {
     if(this.character.luck > 0) {
       let char: Character = this.character;
-      let roller: Roller = new Roller();
-      let result = roller.roll(1, 20);
+      let result = 0;//roller.roll(1, 20);
       let resultText: string;
       let senderName: string;
       let target: number = 20;
@@ -88,8 +86,7 @@ export class CharacterInfoComponent implements OnInit {
   }
 
   testSkill(difficulty: string): void {
-    let roller: Roller = new Roller();
-    let result = roller.roll(1, 20);
+    let result = 0;//roller.roll(1, 20);
     let target: number;
     let resultText: string;
     let symbol: string;

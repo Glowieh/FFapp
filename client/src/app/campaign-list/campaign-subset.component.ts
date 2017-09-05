@@ -39,8 +39,13 @@ export class CampaignSubsetComponent {
   }
 
   enterPassword(campaign: Campaign, role: string, i: number): void {
-    this.errorMsgs[i] = null;
     let url: string;
+
+    if(!this.passwords[i] || this.passwords[i] == '') {
+      return;
+    }
+
+    this.errorMsgs[i] = null;
 
     this.backendService.campaignPasswords[campaign._id] = this.passwords[i];
     if(campaign.lastPlayBy == "None") {

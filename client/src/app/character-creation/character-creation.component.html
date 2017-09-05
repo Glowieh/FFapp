@@ -23,19 +23,19 @@
     <ul class="list-group">
       <li class="list-group-item">
         Swordsmanship: {{character.swordsmanship}}
-        <span [hidden]="character.swordsmanship"><button type="button" class="btn btn-info" (click)="rollSwordsmanship()">Roll 2d6+6</button></span>
+        <span [hidden]="character.swordsmanship"><button type="button" class="btn btn-info" (click)="roll('swordsmanship')">Roll 2d6+6</button></span>
       </li>
       <li class="list-group-item">
         Skill: {{character.skill}}
-        <span [hidden]="character.skill"><button type="button" class="btn btn-info" (click)="rollSkill()">Roll 2d6+6</button></span>
+        <span [hidden]="character.skill"><button type="button" class="btn btn-info" (click)="roll('skill')">Roll 2d6+6</button></span>
       </li>
       <li class="list-group-item">
         Luck: {{character.luck}}
-        <span [hidden]="character.luck"><button type="button" class="btn btn-info" (click)="rollLuck()">Roll 2d6+6</button></span>
+        <span [hidden]="character.luck"><button type="button" class="btn btn-info" (click)="roll('luck')">Roll 2d6+6</button></span>
       </li>
       <li class="list-group-item">
         Stamina: {{character.stamina}}
-        <span [hidden]="character.stamina"><button type="button" class="btn btn-info" (click)="rollStamina()">Roll 2d6+12</button></span>
+        <span [hidden]="character.stamina"><button type="button" class="btn btn-info" (click)="roll('stamina')">Roll 2d6+12</button></span>
       </li>
     </ul>
 

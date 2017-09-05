@@ -19,6 +19,9 @@ export class AuthGuard implements CanActivate {
     else if(this.backendService.campaignPasswords[id]) {
       return this.backendService.authenticateCampaign(id, this.backendService.campaignPasswords[id], role);
     }
+    else if(this.backendService.jwtToken) {
+      return true;
+    }
     else {
       return false;
     }

@@ -88,6 +88,40 @@ export class BackendService {
       .catch(this.handleError);
   }
 
+  getCharacter(id: string): Promise<Character> {
+    return this.http
+      .get(this.apiUrl + 'character/campaign/' + id)
+      .toPromise()
+      .then((response) => {
+        return response.json() as Character;
+      })
+      .catch(this.handleError);
+  }
+
+  updateCharacter(character: Character): Promise<Response> {
+    const headers = new Headers();
+    headers.append('Content-Type', 'application/json');
+
+    return this.http
+      .put(this.apiUrl + 'character', JSON.stringify(character), { headers: headers })
+      .toPromise()
+      .catch(this.handleError);
+  }
+
+  addStatToCharacter(stat: string, character: Character): Promise<Character> {
+    const headers = new Headers({
+      'Content-Type': 'application/json'
+    });
+
+    return this.http
+      .post(this.apiUrl + 'character/roll', JSON.stringify({character: character, stat: stat}), { headers: headers })
+      .toPromise()
+      .then((response) => {
+        return response.json() as Character;
+      })
+      .catch(this.handleError);
+  }
+
 //general
   private handleError(error: any): Promise<any> {
     console.error('An error occurred', error);

@@ -4,7 +4,6 @@ import { SocketService } from '../socket.service';
 import { Monster } from '../misc/monster';
 import { Character } from '../misc/character';
 import { LogMessage } from '../misc/log-message';
-import { Roller } from '../misc/roller';
 
 @Component({
   selector: 'battle',
@@ -104,12 +103,11 @@ export class BattleComponent implements OnInit {
   }
 
   private hit(i: number, characterHits: boolean): LogMessage {
-    let roller = new Roller();
     let charRoll, monsterRoll: number;
     let msg: LogMessage = {senderName: "", message: "", posted: null};
 
-    charRoll = roller.roll(1, 20)+this.character.swordsmanship;
-    monsterRoll = roller.roll(1, 20)+this.monsters[i].combatSkill;
+    charRoll = /*roller.roll(1, 20)+*/this.character.swordsmanship;
+    monsterRoll = /*roller.roll(1, 20)+*/this.monsters[i].combatSkill;
 
     if(charRoll > monsterRoll) {
       msg.senderName = "RollSuccess";

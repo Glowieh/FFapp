@@ -14,6 +14,9 @@ router.get('/campaign', campaignController.getAllBasic);
 router.get('/campaign/:id', campaignController.getById);
 router.put('/campaign/:id', campaignController.update);
 
+router.get('/character/campaign/:id', characterController.getByCampaignId);
 router.post('/character/', characterController.create);
+router.put('/character/', characterController.update);
+router.post('/character/roll', characterController.addStat);
 
 module.exports = router;
