@@ -1,5 +1,7 @@
 var debug = require('debug')('ffapp:socket-controller');
 var async = require('async');
+var jwt = require('jsonwebtoken');
+var config = require('../config');
 
 var Campaign = require('../models/campaign-model');
 var Monster = require('../models/monster-model');
@@ -13,7 +15,22 @@ var characterController = require('../controllers/character-controller');
 exports.init = function(io) {
   io.on('connection', (socket) => {
     var id = socket.handshake.query.id;
+    var decoded = null;
     debug('A user connected to id: ' + id);
+
+    try {
+      decoded = jwt.verify(socket.handshake.query.token, config.secretKeyJWT);
+    } catch(err) {
+      debug('JWT verification failure');
+      socket.disconnect(true);
+      return;
+    }
+
+    if(decoded.campaignId != id || decoded.role != socket.handshake.query.role) {
+      debug('Wrong campaign or role JWT');
+      socket.disconnect(true);
+      return;
+    }
 
     socket.on('disconnect', () => {
       debug('A user disconnected from id: ' + id);

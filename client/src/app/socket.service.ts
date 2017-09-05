@@ -10,8 +10,8 @@ import { LogMessage } from './misc/log-message';
 export class SocketService {
   private socket;
 
-  connect(id: string) {
-    let url: string = window.location.host + '/?id=' + id;
+  connect(id: string, jwtToken: string, role: string) {
+    let url: string = window.location.host + '/?id=' + id + '&token=' + jwtToken + '&role=' + role;
     //console.log("Connecting to: " + url);
 
     let observable = new Observable(observer => {

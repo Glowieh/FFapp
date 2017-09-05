@@ -53,14 +53,25 @@
 
   <div *ngIf="campaign.private">
     <div class="form-group">
-      <label for="name">Password</label>
-      <input type="text" class="form-control" id="password"
+      <label for="name">Player password</label>
+      <input type="text" class="form-control" id="playerPassword"
       required
-      [(ngModel)]="campaign.password" name="password" #password="ngModel">
+      [(ngModel)]="campaign.playerPassword" name="playerPassword" #playerPassword="ngModel">
     </div>
     <campaign-creation-errors
-      [control]="password"
-      [name]="'Password'">
+      [control]="playerPassword"
+      [name]="'Player password'">
+    </campaign-creation-errors>
+
+    <div class="form-group">
+      <label for="name">GM Password</label>
+      <input type="text" class="form-control" id="gmPassword"
+      required
+      [(ngModel)]="campaign.gmPassword" name="gmPassword" #gmPassword="ngModel">
+    </div>
+    <campaign-creation-errors
+      [control]="gmPassword"
+      [name]="'GM password'">
     </campaign-creation-errors>
   </div>
 

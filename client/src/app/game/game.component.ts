@@ -1,7 +1,9 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
+import { BackendService } from '../backend.service';
 import { SocketService } from '../socket.service';
+
 import { Campaign } from '../misc/campaign';
 import { Character } from '../misc/character';
 import { Monster } from '../misc/monster';
@@ -24,6 +26,7 @@ export class GameComponent {
 
   constructor(
     private socketService: SocketService,
+    private backendService: BackendService,
     private route: ActivatedRoute
   ) {}
 
@@ -31,7 +34,7 @@ export class GameComponent {
     this.role = this.route.snapshot.paramMap.get('role');
     this.id = this.route.snapshot.paramMap.get('id');
 
-    this.connection = this.socketService.connect(this.id)
+    this.connection = this.socketService.connect(this.id, this.backendService.jwtToken, this.role)
     .subscribe((packet: any) => {
       //console.log("Got a packet: ", packet);
 

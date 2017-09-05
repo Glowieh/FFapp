@@ -16,12 +16,11 @@ export class AuthGuard implements CanActivate {
     if(!(role == 'GM' || role == 'Player')) {
       return false;
     }
-
-    if(this.backendService.campaignPasswords[id]) {
-      return this.backendService.authenticateCampaign(id, this.backendService.campaignPasswords[id]);
+    else if(this.backendService.campaignPasswords[id]) {
+      return this.backendService.authenticateCampaign(id, this.backendService.campaignPasswords[id], role);
     }
     else {
-      return this.backendService.authenticateCampaign(id, "-");
+      return false;
     }
   }
 }

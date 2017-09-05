@@ -8,7 +8,7 @@
           <div class="form-group">
             <label for="password">Password:</label>
             <input type="password" name="password-{i}" class="form-control" [(ngModel)]="passwords[i]">
-            <button type="button" class="btn btn-success" (click)="enterPassword(campaign, 'GM', i)">Enter as GM</button>
+            <button type="button" class="btn btn-success" [disabled]="campaign.lastPlayBy == 'None'" (click)="enterPassword(campaign, 'GM', i)">Enter as GM</button>
             <button type="button" class="btn btn-success" (click)="enterPassword(campaign, 'Player', i)">Enter as Player</button>
           </div>
         </form>

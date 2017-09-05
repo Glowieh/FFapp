@@ -1,5 +1,7 @@
 var debug = require('debug')('ffapp:campaign-controller');
 var passwordHash = require('password-hash');
+var jwt = require('jsonwebtoken');
+var config = require('../config');
 
 var Campaign = require('../models/campaign-model');
 
@@ -11,14 +13,30 @@ exports.authenticateCampaign = function(req, res, next) {
   Campaign.findById(req.params.id, function(err, result) {
     if(err) { return next(err); }
 
-    if(!result.private || passwordHash.verify(req.body.password, result.password)) {
-      debug("Correct password");
-      res.send(JSON.stringify(true));
+    let response = {token: null, success: false};
+
+    if(!result.private) {
+      debug("Public campaign - no password required");
+      response.success = true;
+    }
+    else if(req.body.role == 'GM' && req.body.password.length > 0 && passwordHash.verify(req.body.password, result.gmPassword)) {
+      debug("Correct GM password");
+      response.success = true;
+    }
+    else if(req.body.role == 'Player' && req.body.password.length > 0 && passwordHash.verify(req.body.password, result.playerPassword)) {
+      debug("Correct Player password");
+      response.success = true;
     }
     else {
       debug("Wrong password");
-      res.send(JSON.stringify(false));
+      response.success = false;
     }
+
+    if(response.success) {
+      response.token = jwt.sign({campaignId: req.params.id, role: req.body.role, password: req.body.password}, config.secretKeyJWT, {expiresIn : 60*60*24});
+    }
+
+    res.send(JSON.stringify(response));
   });
 };
 
@@ -39,10 +57,12 @@ exports.getById = function(req, res, next) {
 };
 
 exports.create = function(req, res, next) {
-  let hashedPassword = null;
+  let hashedPlayerPassword = null;
+  let hashedGMPassword = null;
 
-  if(req.body.password) {
-    hashedPassword = passwordHash.generate(req.body.password);
+  if(req.body.playerPassword) {
+    hashedPlayerPassword = passwordHash.generate(req.body.playerPassword);
+    hashedGMPassword = passwordHash.generate(req.body.gmPassword);
   }
 
   let newCampaign = new Campaign({
@@ -51,9 +71,10 @@ exports.create = function(req, res, next) {
     initialProvisions : req.body.initialProvisions,
     initialGold       : req.body.initialGold,
     initialItems      : req.body.initialItems,
-    private     : req.body.private,
-    password    : hashedPassword,
-    lastPlayBy  : 'None'
+    private           : req.body.private,
+    playerPassword    : hashedPlayerPassword,
+    gmPassword        : hashedGMPassword,
+    lastPlayBy        : 'None'
   });
 
   newCampaign.save(function (err) {

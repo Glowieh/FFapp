@@ -3,14 +3,14 @@ var path = require('path');
 var bodyParser = require('body-parser');
 
 var api = require('./routes/api');
+var config = require('./config');
 
 var app = express();
 
 //database
 var mongoose = require('mongoose');
 mongoose.Promise = global.Promise;
-var mongoDB = '127.0.0.1:27017';
-mongoose.connect(mongoDB);
+mongoose.connect(config.database);
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 

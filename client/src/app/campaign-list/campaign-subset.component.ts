@@ -27,6 +27,7 @@ export class CampaignSubsetComponent {
   enter(campaign: Campaign, role: string): void {
     let url: string;
 
+    this.backendService.campaignPasswords[campaign._id] = "public_access";
     if(campaign.lastPlayBy == "None") {
       url = '/character-creation/';
     }

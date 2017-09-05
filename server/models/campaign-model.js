@@ -21,10 +21,11 @@ var Campaign = new Schema({
   initialGold       : {type: Number, default: 0, min: [0, 'No negative gold allowed.']},
   initialItems      : {type: [String], default: []},
 
-  hasEnded    : {type: Boolean, default: false},
-  private     : {type: Boolean, default: false},
-  password    : {type: String}, //hashed and salted
-  battleMode  : {type: Boolean, default: false},
+  hasEnded      : {type: Boolean, default: false},
+  private       : {type: Boolean, default: false},
+  playerPassword: {type: String}, //hashed and salted
+  gmPassword    : {type: String}, //hashed and salted
+  battleMode    : {type: Boolean, default: false},
 
   creationTime  : {type: Date, default: Date.now, required: true},
   lastPlayBy    : {type: String, enum: ['GM', 'Player', 'None'], required: true},

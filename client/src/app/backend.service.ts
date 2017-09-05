@@ -11,25 +11,26 @@ import 'rxjs/add/operator/toPromise';
 export class BackendService {
   private apiUrl = 'api/';
   campaignPasswords: string[] = [];
+  jwtToken: string = null;
 
   constructor(private http: Http) {}
 
 //campaigns
-  authenticateCampaign(id: string, password: string): Promise<Boolean> {
+  authenticateCampaign(id: string, password: string, role: string): Promise<Boolean> {
     const headers = new Headers({
       'Content-Type': 'application/json'
     });
 
     return this.http
-      .post(this.apiUrl + 'campaign/' + id + '/auth', JSON.stringify({password: password}), { headers: headers })
+      .post(this.apiUrl + 'campaign/' + id + '/auth', JSON.stringify({password: password, role: role}), { headers: headers })
       .toPromise()
       .then(response => {
-        let result: boolean = response.json() as boolean;
-
-        if(result) {
-          this.campaignPasswords[id] = password;
+        let result = response.json();
+        this.campaignPasswords[id] = null; //don't save the passwords unnecessarily
+        if(result.success) {
+          this.jwtToken = result.token;
         }
-        return result;
+        return result.success;
       })
       .catch(this.handleError);
   }

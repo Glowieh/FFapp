@@ -11,10 +11,11 @@ export class Campaign {
   initialGold       : number;
   initialItems      : string[];
 
-  hasEnded    : boolean;
-  private     : boolean;
-  password    : string;
-  battleMode  : boolean;
+  hasEnded      : boolean;
+  private       : boolean;
+  playerPassword: string;
+  gmPassword    : string;
+  battleMode    : boolean;
 
   creationTime  : Date;
   lastPlayBy    : string; //"GM" | "Player" | "None"
