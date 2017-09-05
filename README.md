@@ -16,5 +16,7 @@ The server folder contains the backend API, database and web server:
 * npm install
 * npm start / npm run startdebug
 
+A mongoDB server is required.
+
 
 Mikko "Glowie" Karttunen
