@@ -113,21 +113,16 @@ exports.update = function(req, res, next) {
 ///////Socket functions
 
 exports.saveLogMessage = function(io, id, messages, type, emit) {
-  var promise = Campaign.findById(id).exec();
+  var promise;
 
-  return promise.then(result => {
-    if(result) {
-      if(type == 'ic') {
-        messages.forEach((msg) => result.inCharacterLog.push(msg));
-      }
-      else {
-        messages.forEach((msg) => result.outOfCharacterLog.push(msg));
-      }
+  if(type == 'ic') {
+    promise = Campaign.update( { _id: id }, { $push: { inCharacterLog: { $each: messages }}} ).exec();
+  }
+  else {
+    promise = Campaign.update( { _id: id }, { $push: { outOfCharacterLog: { $each: messages }}} ).exec();
+  }
 
-      return result.save();
-    }
-  })
-  .then(() => {
+  return promise.then(() => {
     if(emit) {
       if(type == 'ic') {
         io.in(id).emit('packet', {type: 'ic-message', message: messages[0]})  //when emit = true, there's only one message in the array

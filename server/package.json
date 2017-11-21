@@ -1,14 +1,16 @@
 {
   "name": "ffapp",
-  "version": "0.0.0",
+  "version": "0.5.0",
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
-    "startdebug": "set DEBUG=*,-not_this&&nodemon ./bin/www"
+    "startdebug": "set DEBUG=*,-not_this&&nodemon ./bin/www",
+    "startdebugu": "DEBUG=* node ./bin/www > /dev/null"
   },
   "dependencies": {
     "async": "^2.5.0",
     "body-parser": "~1.17.1",
+    "compression": "^1.7.1",
     "debug": "~2.6.3",
     "express": "~4.15.2",
     "jsonwebtoken": "^7.4.3",
