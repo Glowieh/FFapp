@@ -116,7 +116,7 @@ function rollStat(stat) {
 
 ///////Socket functions
 
-exports.updateByCampaignId = function(io, id, character, message, emit) {
+exports.updateByCampaignId = function(io, id, character, message, emit, playedBy) {
   var promise = Character.findOne({campaignId: id}).exec();
 
   return promise.then(result => {
@@ -134,7 +134,7 @@ exports.updateByCampaignId = function(io, id, character, message, emit) {
   })
   .then(() => {
     if(emit) {
-      campaignController.saveLogMessage(io, id, [message], 'ic', false);
+      campaignController.saveLogMessage(io, id, [message], 'ic', false, playedBy);
     }
   })
   .then(() => {
@@ -163,7 +163,7 @@ exports.eatProvision = function(io, id) {
   })
   .then(() => {
     message = {senderName: "None", message: "The character ate a provision.", posted: new Date()};
-    return campaignController.saveLogMessage(io, id, [message], 'ic', false);
+    return campaignController.saveLogMessage(io, id, [message], 'ic', false, "Player");
   })
   .then(() => {
     io.in(id).emit('packet', {type: 'update-character', character: character, message: message});
@@ -226,7 +226,7 @@ exports.testAttribute = function(io, id, stat, difficulty) {
     }
   })
   .then(() => {
-    return campaignController.saveLogMessage(io, id, [message], 'ic', false);
+    return campaignController.saveLogMessage(io, id, [message], 'ic', false, "Player");
   })
   .then(() => {
     io.in(id).emit('packet', {type: 'update-character', character: character, message: message});

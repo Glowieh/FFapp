@@ -18,7 +18,7 @@ exports.setMonsters = function(id, monsters) {
 exports.battleRound = function(io, id, hitTarget) {
   var character, monsters;
 
-  characterController.getCharacterByCampaignId(id)
+  return characterController.getCharacterByCampaignId(id)
   .then((char) => {
     character = char;
     return getMonstersByCampaignId(id);
@@ -45,14 +45,14 @@ exports.battleRound = function(io, id, hitTarget) {
     }
 
     async.parallel(saveFunctions, () => {
-      characterController.updateByCampaignId(io, id, character, '', false)
-      .then(() => campaignController.saveLogMessage(io, id, messages, 'ic', false))
+      characterController.updateByCampaignId(io, id, character, '', false, "Player")
+      .then(() => campaignController.saveLogMessage(io, id, messages, 'ic', false, "Player")) //save battle action messages
       .then(() => {
         if(character.stamina <= 0) {
           campaignController.toggleEnded(io, id, false);
         }
         if(monsters.length == 0) {
-          return campaignController.toggleBattleMode(io, id, false);
+          return campaignController.toggleBattleMode(io, id, null, false, "Player"); //save battle ended message
         }
 
         return null;
@@ -69,7 +69,7 @@ exports.battleRound = function(io, id, hitTarget) {
   .catch(err => debug('battleRound error: ', err));
 }
 
-exports.update = function(io, id, monster, message) {
+exports.update = function(io, id, monster, message, playedBy) {
   var promise = Monster.findOne({"_id": monster._id}).exec();
 
   return promise.then((result) => {
@@ -80,15 +80,15 @@ exports.update = function(io, id, monster, message) {
       return result.save();
     }
   })
-  .then(() => campaignController.saveLogMessage(io, id, [message], 'ic', false))
+  .then(() => campaignController.saveLogMessage(io, id, [message], 'ic', false, playedBy))
   .then(() => io.in(id).emit('packet', {type: 'update-monster', monster: monster, message: message}))
   .catch(err => debug('update (Monster) error: ', err));
 }
 
-exports.delete = function(io, id, monsterId, message) {
+exports.delete = function(io, id, monsterId, message, playedBy) {
   var promise = Monster.remove({"_id": monsterId}).exec();
 
-  return promise.then(() => campaignController.saveLogMessage(io, id, [message], 'ic', false))
+  return promise.then(() => campaignController.saveLogMessage(io, id, [message], 'ic', false, playedBy))
   .then(() => io.in(id).emit('packet', {type: 'delete-monster', monsterId: monsterId, message: message}))
   .catch(err => debug('delete (Monster) error: ', err));
 }

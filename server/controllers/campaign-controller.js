@@ -112,14 +112,16 @@ exports.update = function(req, res, next) {
 
 ///////Socket functions
 
-exports.saveLogMessage = function(io, id, messages, type, emit) {
+exports.saveLogMessage = function(io, id, messages, type, emit, playedBy) {
   var promise;
 
   if(type == 'ic') {
-    promise = Campaign.update( { _id: id }, { $push: { inCharacterLog: { $each: messages }}} ).exec();
+    promise = Campaign.update( { _id: id }, { $push: { inCharacterLog: { $each: messages }},
+                                              $set: { lastPlayBy: playedBy, lastPlayTime: new Date() }} ).exec();
   }
   else {
-    promise = Campaign.update( { _id: id }, { $push: { outOfCharacterLog: { $each: messages }}} ).exec();
+    promise = Campaign.update( { _id: id }, { $push: { outOfCharacterLog: { $each: messages }},
+                                              $set: { lastPlayBy: playedBy, lastPlayTime: new Date() }} ).exec();
   }
 
   return promise.then(() => {
@@ -135,6 +137,7 @@ exports.saveLogMessage = function(io, id, messages, type, emit) {
   .catch(err => debug('saveLogMessage error: ', err));
 }
 
+/* Moved to saveLogMessage, since log message is saved every time this is updated
 exports.setLastPlayed = function(io, id, playedBy) {
   var promise = Campaign.findById(id).exec();
 
@@ -147,7 +150,7 @@ exports.setLastPlayed = function(io, id, playedBy) {
     }
   })
   .catch(err => debug('setLastPlayed error: ', err));
-}
+}*/
 
 exports.toggleEnded = function(io, id, emit) {
   var promise = Campaign.findById(id).exec();
@@ -170,7 +173,7 @@ exports.toggleEnded = function(io, id, emit) {
   })
   .then(() => {
     if(emit) {
-      exports.saveLogMessage(io, id, [msg], 'ic', false);
+      exports.saveLogMessage(io, id, [msg], 'ic', false, "GM");
     }
   })
   .then(() => {
@@ -181,7 +184,7 @@ exports.toggleEnded = function(io, id, emit) {
   .catch(err => debug('toggleEnded error: ', err));
 }
 
-exports.toggleBattleMode = function(io, id, monsters, emit) {
+exports.toggleBattleMode = function(io, id, monsters, emit, playedBy) {
   var promise = Campaign.findById(id).exec();
   var battleState;
   var msg = {senderName: "None", message: "", posted: new Date()};
@@ -201,7 +204,7 @@ exports.toggleBattleMode = function(io, id, monsters, emit) {
     }
   })
   .then(() => {
-    exports.saveLogMessage(io, id, [msg], 'ic', false)
+    exports.saveLogMessage(io, id, [msg], 'ic', false, playedBy);
   })
   .then(() => {
     if(!battleState) {
