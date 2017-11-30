@@ -49,7 +49,7 @@ exports.battleRound = function(io, id, hitTarget) {
       .then(() => campaignController.saveLogMessage(io, id, messages, 'ic', false, "Player")) //save battle action messages
       .then(() => {
         if(character.stamina <= 0) {
-          campaignController.toggleEnded(io, id, false);
+          return campaignController.toggleEnded(io, id, false);
         }
         if(monsters.length == 0) {
           return campaignController.toggleBattleMode(io, id, null, false, "Player"); //save battle ended message

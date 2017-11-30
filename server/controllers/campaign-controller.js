@@ -173,13 +173,15 @@ exports.toggleEnded = function(io, id, emit) {
   })
   .then(() => {
     if(emit) {
-      exports.saveLogMessage(io, id, [msg], 'ic', false, "GM");
+      return exports.saveLogMessage(io, id, [msg], 'ic', false, "GM");
     }
   })
   .then(() => {
     if(emit) {
       io.in(id).emit('packet', {type: 'toggle-ended', endState: endState, message: msg});
     }
+
+    return null; //for monsterController.battleround
   })
   .catch(err => debug('toggleEnded error: ', err));
 }
@@ -204,7 +206,7 @@ exports.toggleBattleMode = function(io, id, monsters, emit, playedBy) {
     }
   })
   .then(() => {
-    exports.saveLogMessage(io, id, [msg], 'ic', false, playedBy);
+    return exports.saveLogMessage(io, id, [msg], 'ic', false, playedBy);
   })
   .then(() => {
     if(!battleState) {

@@ -134,7 +134,7 @@ exports.updateByCampaignId = function(io, id, character, message, emit, playedBy
   })
   .then(() => {
     if(emit) {
-      campaignController.saveLogMessage(io, id, [message], 'ic', false, playedBy);
+      return campaignController.saveLogMessage(io, id, [message], 'ic', false, playedBy);
     }
   })
   .then(() => {
